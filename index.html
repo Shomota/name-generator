@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地名生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        p {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        #generate-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #generate-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        #generate-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            min-height: 100px;
+        }
+        
+        #result {
+            font-size: 24px;
+            text-align: center;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .button-container button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .button-container button:hover {
+            background-color: #2980b9;
+        }
+        
+        .button-container button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .action-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .action-btn:nth-child(1) {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .action-btn:nth-child(1):hover {
+            background-color: #229954;
+        }
+        
+        .action-btn:nth-child(2) {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .action-btn:nth-child(2):hover {
+            background-color: #c0392b;
+        }
+        
+        .action-btn:nth-child(3) {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .action-btn:nth-child(3):hover {
+            background-color: #e67e22;
+        }
+        
+        .action-btn:nth-child(4) {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .action-btn:nth-child(4):hover {
+            background-color: #8e44ad;
+        }
+        
+        .action-btn:nth-child(5) {
+            background-color: #1abc9c;
+            color: white;
+        }
+        
+        .action-btn:nth-child(5):hover {
+            background-color: #16a085;
+        }
+        
+        .history-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .history-container h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        #history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .history-item {
+            background-color: #e9ecef;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #495057;
+        }
+        
+        .settings-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .settings-container h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .setting-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .setting-item label {
+            display: inline-block;
+            width: 100px;
+            font-weight: 500;
+            color: #495057;
+            flex-shrink: 0;
+        }
+        
+        .setting-item select {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .setting-item button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .setting-item button:hover {
+            opacity: 0.9;
+        }
+        
+        .character-settings-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .character-settings-container h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .character-input-group {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .character-input-group h4 {
+            margin-bottom: 10px;
+            color: #495057;
+            font-size: 14px;
+        }
+        
+        .character-input-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .character-input-item label {
+            display: inline-block;
+            width: 80px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .character-input-item input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .character-input-item select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .character-input-item .lock-container {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .character-input-item .lock-checkbox {
+            margin-right: 5px;
+            transform: scale(1.2);
+        }
+        
+        .character-input-item .library-btn {
+            margin-left: 10px;
+            padding: 6px 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .character-input-item .library-btn:hover {
+            background-color: #229954;
+        }
+        
+        .lock-status {
+            margin-left: 10px;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            color: #666;
+        }
+        
+        .lock-status.locked {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .generate-count-setting {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .generate-count-setting label {
+            flex: 0 0 100%;
+            margin-bottom: 10px;
+        }
+        
+        .generate-count-setting .slider-container {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .slider-container input[type="range"] {
+            flex: 1;
+            margin: 0 10px;
+        }
+        
+        .slider-container span {
+            width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        /* 字库管理弹窗样式 */
+        .library-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .library-modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .library-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .library-modal-header h3 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .library-content {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .char-item {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .char-item:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .char-item.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .library-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .add-char-input {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        
+        .add-char-btn {
+            padding: 8px 16px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .remove-char-btn {
+            padding: 8px 16px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .save-char-btn {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .library-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .library-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .library-section h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .library-textarea {
+            width: 100%;
+            height: 350px;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.2;
+            resize: vertical;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: auto;
+        }
+        
+        .library-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .action-btn:nth-child(1) {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .action-btn:nth-child(1):hover {
+            background-color: #229954;
+        }
+        
+        .action-btn:nth-child(2) {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .action-btn:nth-child(2):hover {
+            background-color: #c0392b;
+        }
+        
+        .action-btn:nth-child(3) {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .action-btn:nth-child(3):hover {
+            background-color: #e67e22;
+        }
+        
+        .action-btn:nth-child(4) {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        .action-btn:nth-child(4):hover {
+            background-color: #8e44ad;
+        }
+        
+        /* 隐藏的文件输入 */
+        #file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>地名生成器</h1>
+        <p>从网络获取常用中文地名用字库，随机组合生成全新的地名</p>
+        
+        <!-- 字符设置区域 -->
+        <div class="character-settings-container">
+            <h3>字符设置</h3>
+            <div class="character-settings-header" style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label for="name-length">地名字数：</label>
+                    <select id="name-length" onchange="updateCharacterInputs()" style="padding: 8px 12px; font-size: 14px; min-width: 100px;">
+                        <option value="2">2字</option>
+                        <option value="3" selected>3字</option>
+                        <option value="4">4字</option>
+                        <option value="5">5字</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label>字库管理：</label>
+                    <button type="button" onclick="openLibraryManagement()" style="background-color: #3498db; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; min-width: 120px; text-align: center;">打开字库管理</button>
+                </div>
+            </div>
+            <div id="character-inputs">
+                <!-- 动态生成的字符输入框 -->
+            </div>
+        </div>
+        
+        <!-- 生成设置和按钮 -->
+        <div class="settings-container">
+            <h3>生成设置</h3>
+            <div class="setting-item generate-count-setting">
+                <label for="generate-count">生成数量：</label>
+                <div class="slider-container">
+                    <input type="range" id="generate-count" min="1" max="20" value="5" oninput="updateGenerateCount()">
+                    <span id="generate-count-value">5</span>
+                </div>
+            </div>
+            <div class="button-container" style="margin-top: 15px;">
+                <button id="generate-btn" onclick="generatePlaceName()">生成单个地名</button>
+                <button id="generate-multiple-btn" onclick="generateMultiplePlaceNames()">生成多个地名 (<span id="btn-count">5</span>个)</button>
+                <button id="copy-btn" onclick="copyToClipboard()">复制结果</button>
+            </div>
+        </div>
+        
+        <div class="result-container">
+            <div id="result">点击上方按钮生成地名</div>
+        </div>
+        
+        <div class="history-container">
+            <h3>生成历史</h3>
+            <div id="history"></div>
+        </div>
+        
+        <div class="status" id="status">就绪</div>
+    </div>
+    
+    <script>
+        // 地名用字库 - 层级结构：单字、双字、三字词
+        let placeNameChars = {
+            '单字': {
+                '默认': ['东', '南', '西', '北', '中', '大', '小', '新', '旧', '高', '低', '长', '短', '宽', '窄', '深', '浅', '平', '陡', '弯', '直', '正', '偏', '内', '外', '里', '边', '沿', '旁', '间', '心', '尖', '顶', '底', '头', '尾', '口', '根', '源', '流', '起', '始', '首', '初', '开', '进', '来', '往', '迎', '接', '通', '达', '连', '交', '汇', '聚', '合', '同', '共', '群', '众', '多', '少', '盛', '兴', '荣', '生', '存', '有', '实', '真', '善', '美', '好', '优', '强', '胜', '得', '成', '功', '是', '对', '正', '明', '光', '亮', '清', '净', '洁', '纯', '整', '齐', '治', '安', '稳', '定', '静', '宁', '和', '平', '睦', '友', '亲', '厚', '浓', '密', '稠', '满', '充', '足', '全', '完', '良', '精', '细', '巧', '灵', '智', '聪', '慧', '贤', '能', '勇', '刚', '坚', '固', '顺', '利', '福', '吉', '祥', '瑞', '喜', '乐', '欢', '合', '聚', '团', '圆', '满', '增', '升', '涨', '起', '旺', '重', '宏', '巨', '大', '广', '阔', '辽', '远', '深', '高', '耸', '巍', '峨', '峻', '秀', '幽', '雅', '静', '动', '灵', '活', '巧', '妙', '奇', '特', '异', '独'],
+                '形容词': ['大', '小', '新', '旧', '老', '古', '远', '近', '高', '低', '长', '短', '宽', '窄', '深', '浅', '平', '陡', '弯', '直', '正', '偏', '内', '外', '里', '边', '沿', '旁', '间', '心', '尖', '顶', '底', '头', '尾', '口', '根', '源', '流', '起', '始', '首', '初', '开', '进', '来', '往', '迎', '接', '通', '达', '连', '交', '汇', '聚', '合', '同', '共', '群', '众', '多', '少', '盛', '兴', '荣', '生', '存', '有', '实', '真', '善', '美', '好', '优', '强', '胜', '得', '成', '功', '是', '对', '正', '明', '光', '亮', '清', '净', '洁', '纯', '整', '齐', '治', '安', '稳', '定', '静', '宁', '和', '平', '睦', '友', '亲', '厚', '浓', '密', '稠', '满', '充', '足', '全', '完', '良', '精', '细', '巧', '灵', '智', '聪', '慧', '贤', '能', '勇', '刚', '坚', '固', '顺', '利', '福', '吉', '祥', '瑞', '喜', '乐', '欢', '合', '聚', '团', '圆', '满', '增', '升', '涨', '起', '旺', '重', '宏', '巨', '大', '广', '阔', '辽', '远', '深', '高', '耸', '巍', '峨', '峻', '秀', '幽', '雅', '静', '动', '灵', '活', '巧', '妙', '奇', '特', '异', '独'],
+                '方位词': ['东', '南', '西', '北', '中', '上', '下', '左', '右', '前', '后', '内', '外', '里', '外', '间', '旁', '侧', '边', '沿', '顶', '底', '头', '尾', '口', '根', '梢', '源', '流', '起', '止', '始', '终', '首', '末', '初', '开', '关', '进', '出', '入', '来', '去', '往', '返', '迎', '送', '接', '通', '达', '连', '交', '汇', '聚', '散', '合', '分', '同', '异', '共', '独', '群', '孤', '众', '寡'],
+                '水体': ['水', '河', '江', '湖', '海', '洋', '溪', '流', '泉', '瀑', '潭', '池', '塘', '沟', '渠', '井', '源', '涧', '峡', '谷', '湾', '港', '渡', '津', '滩', '岸', '堤', '坝', '堰', '闸', '桥', '洲', '渚', '礁', '屿', '岛'],
+                '地形': ['山', '峰', '岭', '岗', '丘', '陵', '原', '野', '川', '地', '田', '园', '林', '森', '树', '木', '花', '草', '竹', '梅', '兰', '菊', '松', '柏', '枫', '桐', '柳', '杨', '槐', '榆', '杉', '桂', '荷', '莲', '桃', '李', '杏', '梨', '枣', '栗', '柿', '桔', '柚', '橙', '柑', '蕉', '苹', '莓', '葡', '萄', '樱', '枇', '杷', '荔', '枝', '龙', '眼', '芒', '果', '椰', '子', '橄', '榄'],
+                '区划': ['城', '镇', '市', '区', '县', '州', '省', '府', '道', '路', '街', '巷', '弄', '里', '坊', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '门', '桥', '渡', '港', '湾', '岛', '屿', '礁', '滩', '岸', '堤', '坝', '堰', '闸', '渠', '井', '泉', '池', '湖', '海', '河', '江', '溪', '涧', '谷', '峰', '岭', '山', '丘', '陵', '原', '野', '川', '地', '田', '园', '林', '森', '木', '竹', '花', '草', '树', '果', '瓜', '菜', '稻', '麦', '粱', '粟', '豆', '麻', '棉', '桑', '茶', '药', '材', '矿', '产', '宝', '藏'],
+                '动物': ['龙', '凤', '凰', '龟', '蛇', '虎', '豹', '狮', '象', '马', '牛', '羊', '猪', '狗', '猫', '兔', '鼠', '猴', '鸡', '鸭', '鹅', '鸽', '鹰', '鹤', '鹭', '鸥', '雁', '燕', '雀', '鸟', '鱼', '虾', '蟹', '鳖', '蛙', '蝉', '蟋', '蟀', '蝗', '虫', '螳', '螂', '蝴', '蝶', '蜻', '蜓', '蚯', '蚓', '蜗', '牛', '贝', '螺'],
+                '植物': ['树', '木', '花', '草', '竹', '梅', '兰', '菊', '松', '柏', '枫', '桐', '柳', '杨', '槐', '榆', '杉', '桂', '荷', '莲', '桃', '李', '杏', '梨', '枣', '栗', '柿', '桔', '柚', '橙', '柑', '蕉', '苹', '莓', '葡', '萄', '樱', '枇', '杷', '荔', '枝', '龙', '眼', '芒', '果', '椰', '子', '橄', '榄', '稻', '麦', '粱', '粟', '豆', '麻', '棉', '桑', '茶', '药', '材', '林', '森', '园', '田', '地', '土', '壤', '泥', '沙', '石', '岩'],
+                '矿产': ['金', '银', '铜', '铁', '锡', '铅', '锌', '铝', '钢', '煤', '炭', '油', '气', '火', '光', '电', '风', '水', '光', '热', '石', '玉', '宝', '藏', '矿', '产', '砂', '岩', '土', '泥', '沙', '石'],
+                '建筑': ['城', '墙', '门', '楼', '阁', '亭', '台', '榭', '轩', '堂', '馆', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '桥', '塔', '寺', '庙', '观', '庵', '堂', '宫', '殿', '楼', '阁', '亭', '台', '榭', '轩', '堂', '馆', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '门', '桥', '塔', '墙', '门', '路', '街', '巷', '弄', '里', '坊', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '门', '桥', '塔', '楼', '阁', '亭', '台', '榭', '轩', '堂', '馆', '院'],
+                '姓氏': ['王', '李', '张', '刘', '陈', '杨', '赵', '黄', '周', '吴', '徐', '孙', '马', '朱', '胡', '郭', '何', '高', '林', '罗', '郑', '梁', '谢', '宋', '唐', '许', '韩', '冯', '邓', '曹', '彭', '曾', '肖', '田', '董', '袁', '潘', '于', '蒋', '蔡', '余', '杜', '叶', '程', '苏', '魏', '吕', '丁', '任', '沈', '姚', '卢', '姜', '崔', '钟', '谭', '陆', '汪', '范', '金', '石', '廖', '贾', '夏', '韦', '付', '方', '白', '邹', '孟', '熊', '秦', '邱', '江', '尹', '薛', '闫', '段', '雷', '侯', '龙', '史', '陶', '黎', '贺', '顾', '毛', '郝', '龚', '邵', '万', '钱', '严', '覃', '武', '戴', '莫', '孔', '向', '汤']
+            },
+            '双字词': {
+                '默认': ['东方', '西方', '南方', '北方', '中央', '中原', '中华', '神州', '大地', '山河', '江河', '湖海', '山水', '江海', '湖泊', '河流', '山川', '平原', '高原', '盆地', '丘陵', '山地', '森林', '草原', '沙漠', '戈壁', '岛屿', '半岛', '海峡', '海湾', '港口', '码头', '桥梁', '隧道', '公路', '铁路', '机场', '车站', '城市', '乡镇', '村庄', '社区', '街道', '广场', '公园', '花园', '园林', '建筑', '房屋', '大厦', '高楼', '别墅', '公寓', '酒店', '饭店', '商场', '超市', '市场', '商店', '店铺', '银行', '医院', '学校', '大学', '中学', '小学', '幼儿园', '图书馆', '博物馆', '展览馆', '体育馆', '运动场', '剧场', '影院', '音乐厅', '美术馆', '画廊', '寺庙', '教堂', '道观', '庵堂', '宫殿', '城堡', '要塞', '关口', '城门', '城墙', '城楼', '钟楼', '鼓楼', '塔寺', '亭台', '楼阁', '轩榭', '厅堂', '馆院'],
+                '方位': ['东方', '西方', '南方', '北方', '中央', '中原', '中华', '神州', '大地', '山河', '江河', '湖海', '山水', '江海', '湖泊', '河流', '山川'],
+                '地理': ['平原', '高原', '盆地', '丘陵', '山地', '森林', '草原', '沙漠', '戈壁', '岛屿', '半岛', '海峡', '海湾', '港口', '码头', '桥梁', '隧道', '公路', '铁路', '机场', '车站', '城市', '乡镇', '村庄', '社区', '街道', '广场', '公园', '花园', '园林'],
+                '建筑': ['建筑', '房屋', '大厦', '高楼', '别墅', '公寓', '酒店', '饭店', '商场', '超市', '市场', '商店', '店铺', '银行', '医院', '学校', '大学', '中学', '小学', '幼儿园', '图书馆', '博物馆', '展览馆', '体育馆', '运动场', '剧场', '影院', '音乐厅', '美术馆', '画廊', '寺庙', '教堂', '道观', '庵堂', '宫殿', '城堡', '要塞', '关口', '城门', '城墙', '城楼', '钟楼', '鼓楼', '塔寺', '亭台', '楼阁', '轩榭', '厅堂', '馆院']
+            },
+            '三字词': {
+                '默认': ['东方红', '太阳升', '新中国', '新时代', '新社会', '新国家', '新民族', '新人民', '新青年', '新少年', '新儿童', '新学生', '新老师', '新医生', '新护士', '新工人', '新农民', '新军人', '新警察', '新法官', '新律师', '新记者', '新编辑', '新作家', '新画家', '新音乐家', '新舞蹈家', '新演员', '新导演', '新摄影师', '新设计师', '新建筑师', '新工程师', '新科学家', '新发明家', '新企业家', '新商人', '新公务员', '新职员', '新员工', '新同事', '新朋友', '新邻居', '新同学', '新伙伴', '新成员', '新队员', '新团员', '新党员', '新市民', '新村民', '新居民', '新住户', '新租户', '新房东', '新租客', '新客户', '新顾客', '新用户', '新会员', '新粉丝', '新观众', '新听众', '新读者'],
+                '地理': ['东方红', '太阳升', '新中国', '新时代', '新社会', '新国家', '新民族', '新人民', '新青年', '新少年', '新儿童', '新学生', '新老师', '新医生', '新护士', '新工人', '新农民', '新军人', '新警察', '新法官', '新律师', '新记者', '新编辑', '新作家', '新画家', '新音乐家', '新舞蹈家', '新演员', '新导演', '新摄影师', '新设计师', '新建筑师', '新工程师', '新科学家', '新发明家', '新企业家', '新商人', '新公务员', '新职员', '新员工', '新同事', '新朋友', '新邻居', '新同学', '新伙伴', '新成员', '新队员', '新团员', '新党员', '新市民', '新村民', '新居民', '新住户', '新租户', '新房东', '新租客', '新客户', '新顾客', '新用户', '新会员', '新粉丝', '新观众', '新听众', '新读者'],
+                '建筑': ['黄鹤楼', '岳阳楼', '滕王阁', '鹳雀楼', '蓬莱阁', '大观楼', '光岳楼', '钟鼓楼', '天安门', '午门', '神武门', '东华门', '西华门', '太和殿', '中和殿', '保和殿', '乾清宫', '交泰殿', '坤宁宫', '御花园', '颐和园', '圆明园', '避暑山庄', '故宫', '长城', '天坛', '地坛', '日坛', '月坛', '社稷坛', '先农坛', '太庙', '孔庙', '国子监', '雍和宫', '白云观', '潭柘寺', '戒台寺', '红螺寺', '灵光寺', '法源寺', '广济寺', '报国寺', '卧佛寺', '碧云寺', '香山寺', '大觉寺']
+            }
+        };
+        
+        // 初始化地名用字库
+        function initPlaceNameChars() {
+            try {
+                document.getElementById('status').textContent = '初始化地名用字库...';
+                document.getElementById('generate-btn').disabled = true;
+                
+                // 直接使用本地优化的地名用字库
+                // 无需网络获取，使用精心设计的本地数据
+                
+                setTimeout(() => {
+                    // 计算总字数
+                    let totalChars = 0;
+                    Object.values(placeNameChars).forEach(category => {
+                        Object.values(category).forEach(array => {
+                            totalChars += array.length;
+                        });
+                    });
+                    
+                    document.getElementById('status').textContent = `地名用字库初始化完成 (共 ${totalChars} 个用字)`;
+                    document.getElementById('generate-btn').disabled = false;
+                }, 500);
+            } catch (error) {
+                console.error('初始化地名用字库失败:', error);
+                document.getElementById('status').textContent = '初始化地名用字库失败';
+                document.getElementById('generate-btn').disabled = false;
+            }
+        }
+        
+        // 随机生成地名
+        function generatePlaceName() {
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = '生成中...';
+            
+            // 随机决定地名长度（2-4字）
+            const length = Math.floor(Math.random() * 3) + 2;
+            
+            let placeName = '';
+            
+            // 获取当前字库的字符数组
+            const charArray = placeNameChars['单字']['默认'] || [];
+            
+            if (charArray.length === 0) {
+                resultElement.textContent = '字库为空，请先添加字符';
+                return;
+            }
+            
+            // 从统一字库中随机选择字符
+            for (let i = 0; i < length; i++) {
+                placeName += getRandomElement(charArray);
+            }
+            
+            // 显示结果
+            setTimeout(() => {
+                resultElement.textContent = placeName;
+            }, 500);
+        }
+        
+        // 辅助函数：从数组中随机获取元素
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+        
+        // 生成多个地名
+        function generateMultiplePlaceNames() {
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = '生成中...';
+            
+            // 获取当前字库的字符数组
+            const charArray = placeNameChars['单字']['默认'] || [];
+            
+            if (charArray.length === 0) {
+                resultElement.textContent = '字库为空，请先添加字符';
+                return;
+            }
+            
+            // 生成指定数量的地名
+            const placeNames = [];
+            for (let i = 0; i < generateCount; i++) {
+                // 随机决定地名长度（2-4字）
+                const length = Math.floor(Math.random() * 3) + 2;
+                let placeName = '';
+                
+                // 从统一字库中随机选择字符
+                for (let j = 0; j < length; j++) {
+                    placeName += getRandomElement(charArray);
+                }
+                
+                placeNames.push(placeName);
+            }
+            
+            // 显示结果
+            setTimeout(() => {
+                resultElement.textContent = placeNames.join('\n');
+                // 添加到历史记录
+                placeNames.forEach(name => addToHistory(name));
+            }, 500);
+        }
+        
+        // 复制结果到剪贴板
+        function copyToClipboard() {
+            const resultElement = document.getElementById('result');
+            const textToCopy = resultElement.textContent;
+            
+            if (textToCopy && textToCopy !== '点击上方按钮生成地名' && textToCopy !== '生成中...') {
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        alert('复制成功！');
+                    })
+                    .catch(err => {
+                        console.error('复制失败:', err);
+                        alert('复制失败，请手动复制');
+                    });
+            } else {
+                alert('没有可复制的内容');
+            }
+        }
+        
+        // 打开字库管理
+        function openLibraryManagement() {
+            // 创建弹窗
+            let modal = document.getElementById('library-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'library-modal';
+                modal.className = 'library-modal';
+                modal.innerHTML = `
+                    <div class="library-modal-content">
+                        <div class="library-modal-header">
+                            <h3>字库管理</h3>
+                            <button class="close-btn" onclick="closeLibraryModal()">&times;</button>
+                        </div>
+                        <div class="library-panel">
+                            <div class="library-section">
+                                <h4>字库选择</h4>
+                                <select id="library-select" onchange="changeLibrary()" style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+                                <div class="library-actions" style="flex-wrap: wrap;">
+                                    <button class="action-btn" onclick="addNewLibrary()">新增字库</button>
+                                    <button class="action-btn" onclick="renameLibrary()">重命名字库</button>
+                                    <button class="action-btn" onclick="deleteLibrary()">删除字库</button>
+                                    <button class="action-btn" onclick="importLibrary()">导入字库</button>
+                                    <button class="action-btn" onclick="exportLibrary()">导出字库</button>
+
+                                </div>
+                            </div>
+                            <div class="library-section">
+                                <h4>字库内容（自动适应宽度）</h4>
+                                <textarea id="library-textarea" class="library-textarea" placeholder="在此输入字库内容，字符之间用空格或换行分隔"></textarea>
+                            </div>
+                        </div>
+                        <div class="library-controls">
+                            <button class="save-char-btn" onclick="saveLibraryChanges()">保存更改</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                // 添加窗口大小变化事件监听器
+                const textarea = document.getElementById('library-textarea');
+                if (textarea) {
+                    // 添加 resize 事件监听器
+                    const resizeObserver = new ResizeObserver(() => {
+                        updateLibraryTextarea();
+                    });
+                    resizeObserver.observe(textarea);
+                }
+            }
+            
+            // 初始化字库选择下拉框
+            initLibrarySelect();
+            
+            updateLibraryTextarea();
+            
+            // 显示弹窗
+            modal.style.display = 'block';
+        }
+        
+        // 字符设置数组
+        let characterSettings = [];
+        
+        // 历史记录数组
+        let history = [];
+        
+        // 初始化字符输入框
+        function initCharacterInputs() {
+            try {
+                updateCharacterInputs();
+                console.log('字符输入框初始化成功');
+                // 初始化可选栏数
+                updateAvailableColumns();
+            } catch (error) {
+                console.error('字符输入框初始化失败:', error);
+            }
+        }
+        
+        // 更新字符输入框
+        function updateCharacterInputs() {
+            try {
+                const nameLengthElement = document.getElementById('name-length');
+                if (!nameLengthElement) {
+                    console.error('找不到name-length元素');
+                    return;
+                }
+                
+                const nameLength = parseInt(nameLengthElement.value) || 3;
+                const characterInputsElement = document.getElementById('character-inputs');
+                if (!characterInputsElement) {
+                    console.error('找不到character-inputs元素');
+                    return;
+                }
+                
+                characterInputsElement.innerHTML = '';
+                
+                // 保存当前的字符设置
+                const currentSettings = [...characterSettings];
+                
+                // 重置字符设置
+                characterSettings = [];
+                
+                // 计算已使用的字符长度
+                let usedLength = 0;
+                let inputCount = 0;
+                
+                // 生成字符输入框，直到达到总长度
+                while (usedLength < nameLength && inputCount < 10) { // 最多10个输入框
+                    // 使用之前的设置或默认设置
+                    let settings;
+                    if (inputCount < currentSettings.length) {
+                        settings = {
+                            index: inputCount,
+                            locked: currentSettings[inputCount].locked || false,
+                            customChar: currentSettings[inputCount].customChar || '',
+                            library: currentSettings[inputCount].library || '默认',
+                            type: currentSettings[inputCount].type || '单字'
+                        };
+                    } else {
+                        // 默认设置
+                        settings = {
+                            index: inputCount,
+                            locked: false,
+                            customChar: '',
+                            library: '默认',
+                            type: '单字'
+                        };
+                    }
+                    characterSettings.push(settings);
+                    
+                    // 创建字符输入组
+                    const characterInputGroup = document.createElement('div');
+                    characterInputGroup.className = 'character-input-group';
+                    
+                    // 创建标题
+                    const title = document.createElement('h4');
+                    title.textContent = `第${inputCount + 1}部分`;
+                    characterInputGroup.appendChild(title);
+                    
+                    // 创建词库类型选择
+                    const typeSelectItem = document.createElement('div');
+                    typeSelectItem.className = 'character-input-item';
+                    
+                    const typeLabel = document.createElement('label');
+                    typeLabel.htmlFor = `type-select-${inputCount}`;
+                    typeLabel.textContent = '词库类型：';
+                    typeSelectItem.appendChild(typeLabel);
+                    
+                    const typeSelect = document.createElement('select');
+                    typeSelect.id = `type-select-${inputCount}`;
+                    typeSelect.onchange = (function(index) {
+                        return function() {
+                            updateCharacterType(index);
+                        };
+                    })(inputCount);
+                    
+                    // 添加词库类型选项
+                    const types = ['单字', '双字词', '三字词'];
+                    types.forEach(type => {
+                        const option = document.createElement('option');
+                        option.value = type;
+                        option.textContent = type;
+                        if (type === (settings.type || '单字')) {
+                            option.selected = true;
+                        }
+                        typeSelect.appendChild(option);
+                    });
+                    
+                    typeSelectItem.appendChild(typeSelect);
+                    characterInputGroup.appendChild(typeSelectItem);
+                    
+                    // 创建字库选择
+                    const librarySelectItem = document.createElement('div');
+                    librarySelectItem.className = 'character-input-item';
+                    
+                    // 创建标签
+                    const label = document.createElement('label');
+                    label.htmlFor = `library-select-${inputCount}`;
+                    label.textContent = '字库选择：';
+                    librarySelectItem.appendChild(label);
+                    
+                    // 创建下拉框
+                    const select = document.createElement('select');
+                    select.id = `library-select-${inputCount}`;
+                    // 使用闭包保存当前索引值
+                    select.onchange = (function(index) {
+                        return function() {
+                            updateCharacterLibrary(index);
+                        };
+                    })(inputCount);
+                    
+                    // 动态生成选项，基于选择的词库类型
+                    const currentType = settings.type || '单字';
+                    const libraryNames = Object.keys(placeNameChars[currentType]);
+                    console.log('可用字库:', libraryNames);
+                    
+                    libraryNames.forEach(libraryName => {
+                        const option = document.createElement('option');
+                        option.value = libraryName;
+                        option.textContent = libraryName;
+                        if (libraryName === settings.library) {
+                            option.selected = true;
+                        }
+                        select.appendChild(option);
+                    });
+                    
+                    librarySelectItem.appendChild(select);
+                    characterInputGroup.appendChild(librarySelectItem);
+                    
+                    // 创建自定义字符输入
+                    const charInputItem = document.createElement('div');
+                    charInputItem.className = 'character-input-item';
+                    
+                    // 创建标签
+                    const charLabel = document.createElement('label');
+                    charLabel.htmlFor = `custom-char-${inputCount}`;
+                    charLabel.textContent = '自定义字符：';
+                    charInputItem.appendChild(charLabel);
+                    
+                    // 创建输入框
+                    const charInput = document.createElement('input');
+                    charInput.type = 'text';
+                    charInput.id = `custom-char-${inputCount}`;
+                    charInput.maxLength = 3; // 支持最长3个字符
+                    charInput.placeholder = '留空则随机';
+                    charInput.value = settings.customChar || '';
+                    // 使用闭包保存当前索引值
+                    charInput.oninput = (function(index) {
+                        return function() {
+                            updateCustomChar(index);
+                        };
+                    })(inputCount);
+                    charInputItem.appendChild(charInput);
+                    
+                    // 创建锁定状态
+                    const lockStatus = document.createElement('span');
+                    lockStatus.id = `lock-status-${inputCount}`;
+                    lockStatus.className = 'lock-status';
+                    if (settings.locked) {
+                        lockStatus.textContent = '已锁定';
+                        lockStatus.className = 'lock-status locked';
+                    } else {
+                        lockStatus.textContent = '留空随机';
+                        lockStatus.className = 'lock-status';
+                    }
+                    charInputItem.appendChild(lockStatus);
+                    
+                    characterInputGroup.appendChild(charInputItem);
+                    
+                    characterInputsElement.appendChild(characterInputGroup);
+                    
+                    // 更新已使用的字符长度
+                    // 根据词库类型计算长度
+                    let typeLength = 1; // 默认为单字
+                    if (currentType === '双字词') {
+                        typeLength = 2;
+                    } else if (currentType === '三字词') {
+                        typeLength = 3;
+                    }
+                    usedLength += typeLength;
+                    inputCount++;
+                }
+                
+                console.log('字符输入框更新成功，输入框数量:', inputCount, '已使用长度:', usedLength, '总长度:', nameLength);
+            } catch (error) {
+                console.error('更新字符输入框失败:', error);
+                // 显示错误信息
+                const characterInputsElement = document.getElementById('character-inputs');
+                if (characterInputsElement) {
+                    characterInputsElement.innerHTML = `<div style="color: red; padding: 10px;">错误：无法生成字符输入框，请刷新页面重试</div>`;
+                }
+            }
+        }
+        
+        // 更新可选栏数
+        function updateAvailableColumns() {
+            const nameLengthElement = document.getElementById('name-length');
+            if (!nameLengthElement) {
+                console.error('找不到name-length元素');
+                return;
+            }
+            
+            // 保存当前的onchange事件处理函数
+            const originalOnChange = nameLengthElement.onchange;
+            // 暂时移除onchange事件处理函数，避免无限递归
+            nameLengthElement.onchange = null;
+            
+            // 更新地名字数下拉框的选项
+            const currentValue = nameLengthElement.value;
+            nameLengthElement.innerHTML = '';
+            
+            // 生成从2到10的选项，让用户可以自由选择
+            for (let i = 2; i <= 10; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}字`;
+                if (i === parseInt(currentValue) || (i === 3 && !currentValue)) {
+                    option.selected = true;
+                }
+                nameLengthElement.appendChild(option);
+            }
+            
+            // 重新添加onchange事件处理函数
+            nameLengthElement.onchange = originalOnChange;
+        }
+        
+        // 更新自定义字符
+        function updateCustomChar(index) {
+            const customChar = document.getElementById(`custom-char-${index}`).value;
+            const lockStatusElement = document.getElementById(`lock-status-${index}`);
+            
+            characterSettings[index].customChar = customChar;
+            
+            if (customChar) {
+                // 有输入，自动锁定
+                characterSettings[index].locked = true;
+                if (lockStatusElement) {
+                    lockStatusElement.textContent = '已锁定';
+                    lockStatusElement.className = 'lock-status locked';
+                }
+            } else {
+                // 无输入，自动解锁
+                characterSettings[index].locked = false;
+                if (lockStatusElement) {
+                    lockStatusElement.textContent = '留空随机';
+                    lockStatusElement.className = 'lock-status';
+                }
+            }
+        }
+        
+        // 更新词库类型
+        function updateCharacterType(index) {
+            const typeSelect = document.getElementById(`type-select-${index}`);
+            const librarySelect = document.getElementById(`library-select-${index}`);
+            
+            if (typeSelect) {
+                const newType = typeSelect.value;
+                characterSettings[index].type = newType;
+                console.log(`第${index + 1}部分的词库类型已更新为: ${newType}`);
+                
+                // 更新字库选择下拉框
+                if (librarySelect) {
+                    // 清空现有选项
+                    librarySelect.innerHTML = '';
+                    
+                    // 添加新类型的字库选项
+                    const libraryNames = Object.keys(placeNameChars[newType]);
+                    libraryNames.forEach(libraryName => {
+                        const option = document.createElement('option');
+                        option.value = libraryName;
+                        option.textContent = libraryName;
+                        librarySelect.appendChild(option);
+                    });
+                    
+                    // 更新字库设置
+                    characterSettings[index].library = libraryNames[0] || '默认';
+                }
+                
+                // 更新字符输入框，根据词库类型和总地名字数调整输入框数量
+                updateCharacterInputs();
+            }
+        }
+        
+        // 更新字符字库
+        function updateCharacterLibrary(index) {
+            const librarySelect = document.getElementById(`library-select-${index}`);
+            if (librarySelect) {
+                characterSettings[index].library = librarySelect.value;
+                console.log(`第${index + 1}部分的字库已更新为: ${librarySelect.value}`);
+            }
+        }
+        
+        // 生成单个地名（支持锁定字符）
+        function generatePlaceName() {
+            try {
+                const resultElement = document.getElementById('result');
+                if (!resultElement) {
+                    console.error('找不到result元素');
+                    return;
+                }
+                
+                resultElement.textContent = '生成中...';
+                
+                const nameLengthElement = document.getElementById('name-length');
+                if (!nameLengthElement) {
+                    console.error('找不到name-length元素');
+                    resultElement.textContent = '错误：找不到设置元素';
+                    return;
+                }
+                
+                const nameLength = parseInt(nameLengthElement.value) || 3;
+                console.log('生成地名字数:', nameLength);
+                
+                if (characterSettings.length !== nameLength) {
+                    console.error('字符设置长度不匹配:', characterSettings.length, 'vs', nameLength);
+                    // 重新初始化字符设置
+                    updateCharacterInputs();
+                }
+                
+                let placeName = '';
+                let usedLength = 0;
+                
+                for (let i = 0; i < nameLength && usedLength < nameLength; i++) {
+                    const settings = characterSettings[i];
+                    if (!settings) {
+                        console.error(`找不到第${i}个字符的设置`);
+                        continue;
+                    }
+                    
+                    let char;
+                    if (settings.locked && settings.customChar) {
+                        // 使用锁定的自定义字符
+                        char = settings.customChar;
+                    } else {
+                        // 从字库中随机选择字符
+                        const libraryName = settings.library || '默认';
+                        const type = settings.type || '单字';
+                        const charArray = placeNameChars[type][libraryName] || [];
+                        
+                        if (charArray.length === 0) {
+                            resultElement.textContent = `字库 "${libraryName}" 为空，请先添加字符`;
+                            return;
+                        }
+                        
+                        char = getRandomElement(charArray);
+                    }
+                    
+                    placeName += char;
+                    usedLength += char.length;
+                }
+                
+                // 确保生成的地名长度不超过设置的长度
+                if (placeName.length > nameLength) {
+                    placeName = placeName.substring(0, nameLength);
+                }
+                
+                // 显示结果
+                setTimeout(() => {
+                    resultElement.textContent = placeName;
+                    // 添加到历史记录
+                    addToHistory(placeName);
+                }, 500);
+            } catch (error) {
+                console.error('生成地名失败:', error);
+                const resultElement = document.getElementById('result');
+                if (resultElement) {
+                    resultElement.textContent = '生成失败，请重试';
+                }
+            }
+        }
+        
+        // 生成多个地名（支持锁定字符）
+        function generateMultiplePlaceNames() {
+            try {
+                const resultElement = document.getElementById('result');
+                if (!resultElement) {
+                    console.error('找不到result元素');
+                    return;
+                }
+                
+                resultElement.textContent = '生成中...';
+                
+                const nameLengthElement = document.getElementById('name-length');
+                if (!nameLengthElement) {
+                    console.error('找不到name-length元素');
+                    resultElement.textContent = '错误：找不到设置元素';
+                    return;
+                }
+                
+                const nameLength = parseInt(nameLengthElement.value) || 3;
+                const generateCountElement = document.getElementById('generate-count');
+                const generateCount = parseInt(generateCountElement.value) || 5;
+                
+                console.log('生成地名字数:', nameLength);
+                console.log('生成数量:', generateCount);
+                
+                if (characterSettings.length !== nameLength) {
+                    console.error('字符设置长度不匹配:', characterSettings.length, 'vs', nameLength);
+                    // 重新初始化字符设置
+                    updateCharacterInputs();
+                }
+                
+                const placeNames = [];
+                
+                for (let j = 0; j < generateCount; j++) {
+                    let placeName = '';
+                    let usedLength = 0;
+                    
+                    for (let i = 0; i < nameLength && usedLength < nameLength; i++) {
+                        const settings = characterSettings[i];
+                        if (!settings) {
+                            console.error(`找不到第${i}个字符的设置`);
+                            continue;
+                        }
+                        
+                        let char;
+                        if (settings.locked && settings.customChar) {
+                            // 使用锁定的自定义字符
+                            char = settings.customChar;
+                        } else {
+                            // 从字库中随机选择字符
+                            const libraryName = settings.library || '默认';
+                            const type = settings.type || '单字';
+                            const charArray = placeNameChars[type][libraryName] || [];
+                            
+                            if (charArray.length === 0) {
+                                resultElement.textContent = `字库 "${libraryName}" 为空，请先添加字符`;
+                                return;
+                            }
+                            
+                            char = getRandomElement(charArray);
+                        }
+                        
+                        placeName += char;
+                        usedLength += char.length;
+                    }
+                    
+                    // 确保生成的地名长度不超过设置的长度
+                    if (placeName.length > nameLength) {
+                        placeName = placeName.substring(0, nameLength);
+                    }
+                    
+                    placeNames.push(placeName);
+                }
+                
+                // 显示结果
+                setTimeout(() => {
+                    resultElement.textContent = placeNames.join('\n');
+                    // 添加到历史记录
+                    placeNames.forEach(name => addToHistory(name));
+                }, 500);
+            } catch (error) {
+                console.error('生成多个地名失败:', error);
+                const resultElement = document.getElementById('result');
+                if (resultElement) {
+                    resultElement.textContent = '生成失败，请重试';
+                }
+            }
+        }
+        
+        // 添加到历史记录
+        function addToHistory(placeName) {
+            if (!placeName) return;
+            
+            // 限制历史记录数量
+            if (history.length >= 50) {
+                history.shift();
+            }
+            
+            // 避免重复
+            if (!history.includes(placeName)) {
+                history.push(placeName);
+            }
+            
+            // 更新历史记录显示
+            updateHistoryDisplay();
+        }
+        
+        // 更新历史记录显示
+        function updateHistoryDisplay() {
+            const historyElement = document.getElementById('history');
+            if (!historyElement) return;
+            
+            historyElement.innerHTML = '';
+            
+            history.forEach(name => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.textContent = name;
+                historyItem.onclick = function() {
+                    // 点击复制到剪贴板
+                    navigator.clipboard.writeText(name)
+                        .then(() => {
+                            // 显示复制成功的反馈
+                            const originalText = historyItem.textContent;
+                            historyItem.textContent = '已复制！';
+                            setTimeout(() => {
+                                historyItem.textContent = originalText;
+                            }, 1000);
+                        })
+                        .catch(err => {
+                            console.error('复制失败:', err);
+                        });
+                };
+                historyElement.appendChild(historyItem);
+            });
+        }
+        
+        // 更新生成数量显示
+        function updateGenerateCount() {
+            const generateCountElement = document.getElementById('generate-count');
+            const generateCountValueElement = document.getElementById('generate-count-value');
+            const btnCountElement = document.getElementById('btn-count');
+            
+            if (generateCountElement && generateCountValueElement && btnCountElement) {
+                const count = generateCountElement.value;
+                generateCountValueElement.textContent = count;
+                btnCountElement.textContent = count;
+            }
+        }
+        
+        // 关闭字库管理弹窗
+        function closeLibraryModal() {
+            const modal = document.getElementById('library-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 初始化字库选择下拉框
+        function initLibrarySelect() {
+            const selectElement = document.getElementById('library-select');
+            if (!selectElement) return;
+            
+            selectElement.innerHTML = '';
+            
+            // 遍历所有字库并添加到下拉框
+            Object.keys(placeNameChars).forEach(category => {
+                const categoryOption = document.createElement('option');
+                categoryOption.value = category;
+                categoryOption.textContent = `--- ${category} ---`;
+                categoryOption.disabled = true;
+                selectElement.appendChild(categoryOption);
+                
+                Object.keys(placeNameChars[category]).forEach(libraryName => {
+                    const option = document.createElement('option');
+                    option.value = `${category}/${libraryName}`;
+                    option.textContent = libraryName;
+                    selectElement.appendChild(option);
+                });
+            });
+            
+            // 默认选择第一个可用字库
+            if (selectElement.options.length > 0) {
+                for (let i = 0; i < selectElement.options.length; i++) {
+                    if (!selectElement.options[i].disabled) {
+                        selectElement.selectedIndex = i;
+                        break;
+                    }
+                }
+                changeLibrary();
+            }
+        }
+        
+        // 切换字库
+        function changeLibrary() {
+            const selectElement = document.getElementById('library-select');
+            const textareaElement = document.getElementById('library-textarea');
+            
+            if (!selectElement || !textareaElement) return;
+            
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+            
+            // 解析选择的值，格式为 "category/library"
+            const [category, libraryName] = selectedValue.split('/');
+            if (!category || !libraryName) return;
+            
+            const charArray = placeNameChars[category][libraryName] || [];
+            textareaElement.value = charArray.join(' ');
+        }
+        
+        // 保存字库更改
+        function saveLibraryChanges() {
+            const selectElement = document.getElementById('library-select');
+            const textareaElement = document.getElementById('library-textarea');
+            
+            if (!selectElement || !textareaElement) return;
+            
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+            
+            // 解析选择的值，格式为 "category/library"
+            const [category, libraryName] = selectedValue.split('/');
+            if (!category || !libraryName) return;
+            
+            // 从文本框中读取字库内容
+            const content = textareaElement.value;
+            // 解析字符，支持空格和换行分隔
+            const charArray = content.split(/\s+/).filter(char => char);
+            
+            // 更新字库
+            placeNameChars[category][libraryName] = charArray;
+            
+            // 显示保存成功的消息
+            alert('字库更改已保存');
+        }
+        
+        // 新增字库
+        function addNewLibrary() {
+            const libraryName = prompt('请输入新字库名称：');
+            if (!libraryName) return;
+            
+            // 默认添加到单字分类
+            if (!placeNameChars['单字'][libraryName]) {
+                placeNameChars['单字'][libraryName] = [];
+                // 重新初始化字库选择下拉框
+                initLibrarySelect();
+                alert('新字库已添加');
+            } else {
+                alert('字库名称已存在');
+            }
+        }
+        
+        // 重命名字库
+        function renameLibrary() {
+            const selectElement = document.getElementById('library-select');
+            if (!selectElement) return;
+            
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+            
+            // 解析选择的值，格式为 "category/library"
+            const [category, oldLibraryName] = selectedValue.split('/');
+            if (!category || !oldLibraryName) return;
+            
+            const newLibraryName = prompt('请输入新字库名称：', oldLibraryName);
+            if (!newLibraryName || newLibraryName === oldLibraryName) return;
+            
+            if (!placeNameChars[category][newLibraryName]) {
+                // 复制旧字库内容到新字库
+                placeNameChars[category][newLibraryName] = [...placeNameChars[category][oldLibraryName]];
+                // 删除旧字库
+                delete placeNameChars[category][oldLibraryName];
+                // 重新初始化字库选择下拉框
+                initLibrarySelect();
+                alert('字库已重命名');
+            } else {
+                alert('新字库名称已存在');
+            }
+        }
+        
+        // 删除字库
+        function deleteLibrary() {
+            const selectElement = document.getElementById('library-select');
+            if (!selectElement) return;
+            
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+            
+            // 解析选择的值，格式为 "category/library"
+            const [category, libraryName] = selectedValue.split('/');
+            if (!category || !libraryName) return;
+            
+            // 确认删除
+            if (confirm(`确定要删除字库 "${libraryName}" 吗？`)) {
+                // 删除字库
+                delete placeNameChars[category][libraryName];
+                // 重新初始化字库选择下拉框
+                initLibrarySelect();
+                alert('字库已删除');
+            }
+        }
+        
+        // 导入字库
+        function importLibrary() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.txt';
+            input.multiple = true;
+            
+            input.onchange = function(e) {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                let importedCount = 0;
+                
+                for (let file of files) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const content = e.target.result;
+                            const charArray = content.split(/\s+/).filter(char => char);
+                            
+                            // 使用文件名作为字库名称（去除扩展名）
+                            const fileName = file.name.replace(/\.txt$/i, '');
+                            // 默认添加到单字分类
+                            placeNameChars['单字'][fileName] = charArray;
+                            importedCount++;
+                            
+                            if (importedCount === files.length) {
+                                // 重新初始化字库选择下拉框
+                                initLibrarySelect();
+                                alert(`成功导入 ${importedCount} 个字库`);
+                            }
+                        } catch (error) {
+                            console.error('导入字库失败:', error);
+                            alert('导入字库失败，请检查文件格式');
+                        }
+                    };
+                    reader.readAsText(file, 'utf-8');
+                }
+            };
+            
+            input.click();
+        }
+        
+        // 导出字库
+        function exportLibrary() {
+            const selectElement = document.getElementById('library-select');
+            if (!selectElement) return;
+            
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+            
+            // 解析选择的值，格式为 "category/library"
+            const [category, libraryName] = selectedValue.split('/');
+            if (!category || !libraryName) return;
+            
+            const charArray = placeNameChars[category][libraryName] || [];
+            const content = charArray.join(' ');
+            
+            // 创建Blob对象
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${libraryName}.txt`;
+            link.click();
+            
+            // 释放URL
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 100);
+        }
+        
+        // 更新字库文本框
+        function updateLibraryTextarea() {
+            const textarea = document.getElementById('library-textarea');
+            if (!textarea) return;
+            
+            // 调整文本框内容的显示方式
+            // 这里可以添加自动调整文本框高度的逻辑
+        }
+        
+        // 页面加载完成后初始化
+        window.onload = function() {
+            initPlaceNameChars();
+            initCharacterInputs();
+            updateGenerateCount();
+        };
+    </script>
+</body>
+</html>
