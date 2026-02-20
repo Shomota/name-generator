@@ -20,11 +20,69 @@
         
         .container {
             max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
+            margin: 20px auto;
+            padding: 20px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .button-container button {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .character-settings-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px !important;
+            }
+            
+            .character-settings-header > div {
+                width: 100%;
+            }
+            
+            .character-input-item {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .character-input-item label {
+                flex: 0 0 100%;
+                margin-bottom: 5px;
+            }
+            
+            .character-input-item input {
+                flex: 1;
+                min-width: 150px;
+            }
+            
+            .library-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                margin: 0 5px 5px 0;
+            }
+            
+            .lock-status {
+                margin: 5px 0;
+            }
         }
         
         h1 {
@@ -393,9 +451,10 @@
         }
         
         .character-input-item {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .character-input-item label {
@@ -978,6 +1037,7 @@
                     
                     const typeSelect = document.createElement('select');
                     typeSelect.id = `type-select-${inputCount}`;
+                    typeSelect.style.width = '100%';
                     typeSelect.onchange = (function(index) {
                         return function() {
                             updateCharacterType(index);
@@ -1012,6 +1072,7 @@
                     // 创建下拉框
                     const select = document.createElement('select');
                     select.id = `library-select-${inputCount}`;
+                    select.style.width = '100%';
                     // 使用闭包保存当前索引值
                     select.onchange = (function(index) {
                         return function() {
@@ -1047,10 +1108,17 @@
                     charLabel.textContent = '自定义字符：';
                     charInputItem.appendChild(charLabel);
                     
+                    // 创建输入框容器
+                    const inputContainer = document.createElement('div');
+                    inputContainer.style.display = 'flex';
+                    inputContainer.style.alignItems = 'center';
+                    inputContainer.style.flex = '1';
+                    
                     // 创建输入框
                     const charInput = document.createElement('input');
                     charInput.type = 'text';
                     charInput.id = `custom-char-${inputCount}`;
+                    charInput.style.width = '70%';
                     // 根据词库类型设置最大长度
                     let maxLength = 1; // 默认单字词
                     if (currentType === '双字词') {
@@ -1069,12 +1137,14 @@
                             updateCustomChar(index);
                         };
                     })(inputCount);
-                    charInputItem.appendChild(charInput);
+                    inputContainer.appendChild(charInput);
                     
                     // 创建锁定状态
                     const lockStatus = document.createElement('span');
                     lockStatus.id = `lock-status-${inputCount}`;
                     lockStatus.className = 'lock-status';
+                    lockStatus.style.marginLeft = '10px';
+                    lockStatus.style.whiteSpace = 'nowrap';
                     if (settings.locked) {
                         lockStatus.textContent = '已锁定';
                         lockStatus.className = 'lock-status locked';
@@ -1082,30 +1152,46 @@
                         lockStatus.textContent = '留空随机';
                         lockStatus.className = 'lock-status';
                     }
-                    charInputItem.appendChild(lockStatus);
+                    inputContainer.appendChild(lockStatus);
+                    
+                    charInputItem.appendChild(inputContainer);
+                    
+                    // 创建按钮容器
+                    const btnContainer = document.createElement('div');
+                    btnContainer.style.display = 'flex';
+                    btnContainer.style.alignItems = 'center';
+                    btnContainer.style.gap = '10px';
+                    btnContainer.style.marginTop = '10px';
+                    btnContainer.style.width = '100%';
                     
                     // 创建从词库选择按钮
                     const selectFromLibraryBtn = document.createElement('button');
                     selectFromLibraryBtn.className = 'library-btn';
-                    selectFromLibraryBtn.textContent = '从词库选择';
+                    selectFromLibraryBtn.textContent = '选字符';
+                    selectFromLibraryBtn.style.flex = '1';
+                    selectFromLibraryBtn.style.whiteSpace = 'nowrap';
                     selectFromLibraryBtn.onclick = (function(index) {
                         return function() {
                             selectCharFromLibrary(index);
                         };
                     })(inputCount);
-                    charInputItem.appendChild(selectFromLibraryBtn);
+                    btnContainer.appendChild(selectFromLibraryBtn);
                     
                     // 创建清空按钮
                     const clearBtn = document.createElement('button');
                     clearBtn.className = 'library-btn';
                     clearBtn.textContent = '清空';
                     clearBtn.style.backgroundColor = '#e74c3c'; // 红色背景
+                    clearBtn.style.flex = '1';
+                    clearBtn.style.whiteSpace = 'nowrap';
                     clearBtn.onclick = (function(index) {
                         return function() {
                             clearCustomChar(index);
                         };
                     })(inputCount);
-                    charInputItem.appendChild(clearBtn);
+                    btnContainer.appendChild(clearBtn);
+                    
+                    charInputItem.appendChild(btnContainer);
                     
                     characterInputGroup.appendChild(charInputItem);
                     
@@ -1969,5 +2055,8 @@
             updateGenerateCount();
         };
     </script>
+    <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
+        <p>项目源码：<a href="https://github.com" target="_blank">GitHub</a></p>
+    </div>
 </body>
 </html>
