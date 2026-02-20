@@ -11,20 +11,78 @@
             box-sizing: border-box;
         }
         
+        /* 定义CSS变量 */
+        :root {
+            --bg-color: #f5f5f5;
+            --container-bg: white;
+            --text-color: #333;
+            --text-secondary: #666;
+            --border-color: #e9ecef;
+            --card-bg: #f8f9fa;
+            --result-bg: #ecf0f1;
+            --history-bg: #f8f9fa;
+            --footer-bg: #f8f9fa;
+            --btn-primary-bg: #3498db;
+            --btn-primary-hover: #2980b9;
+            --btn-success-bg: #27ae60;
+            --btn-success-hover: #229954;
+            --btn-danger-bg: #e74c3c;
+            --btn-danger-hover: #c0392b;
+            --btn-warning-bg: #f39c12;
+            --btn-warning-hover: #e67e22;
+            --btn-info-bg: #1abc9c;
+            --btn-info-hover: #16a085;
+            --btn-secondary-bg: #95a5a6;
+            --btn-secondary-hover: #7f8c8d;
+            --input-border: #ced4da;
+            --input-focus: #3498db;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 暗色模式 */
+        body.dark-mode {
+            --bg-color: #1a1a1a;
+            --container-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --card-bg: #333333;
+            --result-bg: #333333;
+            --history-bg: #333333;
+            --footer-bg: #2d2d2d;
+            --btn-primary-bg: #3498db;
+            --btn-primary-hover: #2980b9;
+            --btn-success-bg: #27ae60;
+            --btn-success-hover: #229954;
+            --btn-danger-bg: #e74c3c;
+            --btn-danger-hover: #c0392b;
+            --btn-warning-bg: #f39c12;
+            --btn-warning-hover: #e67e22;
+            --btn-info-bg: #1abc9c;
+            --btn-info-hover: #16a085;
+            --btn-secondary-bg: #666666;
+            --btn-secondary-hover: #777777;
+            --input-border: #555555;
+            --input-focus: #3498db;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: white;
+            background-color: var(--container-bg);
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         /* 响应式设计 */
@@ -113,36 +171,41 @@
         
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: var(--text-color);
             margin-bottom: 30px;
+            transition: color 0.3s ease;
         }
         
         p {
             text-align: center;
             margin-bottom: 30px;
-            color: #666;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
         
         .result-container {
             margin-top: 30px;
             padding: 20px;
-            background-color: #ecf0f1;
+            background-color: var(--result-bg);
             border-radius: 5px;
             min-height: 100px;
+            transition: background-color 0.3s ease;
         }
         
         #result {
             font-size: 24px;
             text-align: center;
-            color: #2c3e50;
+            color: var(--text-color);
             font-weight: bold;
+            transition: color 0.3s ease;
         }
         
         .status {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
-            color: #7f8c8d;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
         
         .button-container {
@@ -178,92 +241,94 @@
         
         /* 主按钮 */
         .btn-primary {
-            background-color: #3498db;
+            background-color: var(--btn-primary-bg);
             color: white;
         }
         
         .btn-primary:hover {
-            background-color: #2980b9;
+            background-color: var(--btn-primary-hover);
         }
         
         /* 成功按钮 */
         .btn-success {
-            background-color: #27ae60;
+            background-color: var(--btn-success-bg);
             color: white;
         }
         
         .btn-success:hover {
-            background-color: #229954;
+            background-color: var(--btn-success-hover);
         }
         
         /* 危险按钮 */
         .btn-danger {
-            background-color: #e74c3c;
+            background-color: var(--btn-danger-bg);
             color: white;
         }
         
         .btn-danger:hover {
-            background-color: #c0392b;
+            background-color: var(--btn-danger-hover);
         }
         
         /* 警告按钮 */
         .btn-warning {
-            background-color: #f39c12;
+            background-color: var(--btn-warning-bg);
             color: white;
         }
         
         .btn-warning:hover {
-            background-color: #e67e22;
+            background-color: var(--btn-warning-hover);
         }
         
         /* 信息按钮 */
         .btn-info {
-            background-color: #1abc9c;
+            background-color: var(--btn-info-bg);
             color: white;
         }
         
         .btn-info:hover {
-            background-color: #16a085;
+            background-color: var(--btn-info-hover);
         }
         
         /* 次要按钮 */
         .btn-secondary {
-            background-color: #95a5a6;
+            background-color: var(--btn-secondary-bg);
             color: white;
         }
         
         .btn-secondary:hover {
-            background-color: #7f8c8d;
+            background-color: var(--btn-secondary-hover);
         }
         
         /* 统一表单元素样式 */
         input:not([type="checkbox"]):not([type="radio"]), select, textarea {
             padding: 10px 14px;
-            border: 1px solid #ced4da;
+            border: 1px solid var(--input-border);
             border-radius: 5px;
             font-size: 14px;
-            transition: border-color 0.3s ease;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
         }
         
         /* 复选框和单选框样式 */
         input[type="checkbox"], input[type="radio"] {
             margin: 0;
             padding: 0;
-            border: 1px solid #ced4da;
+            border: 1px solid var(--input-border);
             border-radius: 3px;
             transition: border-color 0.3s ease;
         }
         
         input:focus, textarea:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--input-focus);
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25);
         }
         
         /* 下拉框和滑动条的焦点样式 */
         select:focus, input[type="range"]:focus {
             outline: none;
-            border-color: #ced4da;
+            border-color: var(--input-border);
             box-shadow: none;
         }
         
@@ -272,13 +337,15 @@
         .history-container {
             margin-top: 30px;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: var(--history-bg);
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         
         .history-container h3 {
             margin-bottom: 10px;
-            color: #2c3e50;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
         
         #history {
@@ -288,31 +355,33 @@
         }
         
         .history-item {
-            background-color: #e9ecef;
+            background-color: var(--border-color);
             padding: 8px 12px;
             border-radius: 15px;
             font-size: 14px;
-            color: #495057;
+            color: var(--text-color);
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .history-item:hover {
-            background-color: #dee2e6;
+            background-color: var(--btn-secondary-bg);
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
         }
         
         .settings-container {
             margin-top: 20px;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: var(--card-bg);
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         
         .settings-container h3 {
             margin-bottom: 15px;
-            color: #2c3e50;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
         
         .setting-item {
@@ -327,41 +396,46 @@
             display: inline-block;
             width: 100px;
             font-weight: 500;
-            color: #495057;
+            color: var(--text-color);
             flex-shrink: 0;
+            transition: color 0.3s ease;
         }
         
         .setting-item select {
             flex: 1;
             min-width: 150px;
         }
-        
+
 
         
         .character-settings-container {
             margin-top: 20px;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: var(--card-bg);
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         
         .character-settings-container h3 {
             margin-bottom: 15px;
-            color: #2c3e50;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
         
         .character-input-group {
             margin-bottom: 15px;
             padding: 15px;
-            background-color: white;
+            background-color: var(--container-bg);
             border-radius: 5px;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
         .character-input-group h4 {
             margin-bottom: 10px;
-            color: #495057;
+            color: var(--text-color);
             font-size: 14px;
+            transition: color 0.3s ease;
         }
         
         .character-input-item {
@@ -375,7 +449,8 @@
             display: inline-block;
             width: 80px;
             font-size: 14px;
-            color: #6c757d;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
         }
         
         .character-input-item input {
@@ -400,7 +475,7 @@
         .character-input-item .library-btn {
             margin-left: 10px;
             padding: 8px 14px;
-            background-color: #27ae60;
+            background-color: var(--btn-success-bg);
             color: white;
             border: none;
             border-radius: 5px;
@@ -410,7 +485,7 @@
         }
         
         .character-input-item .library-btn:hover {
-            background-color: #229954;
+            background-color: var(--btn-success-hover);
             transform: translateY(-1px);
         }
         
@@ -419,12 +494,13 @@
             font-size: 14px;
             padding: 4px 8px;
             border-radius: 4px;
-            background-color: #f0f0f0;
-            color: #666;
+            background-color: var(--border-color);
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
         }
         
         .lock-status.locked {
-            background-color: #27ae60;
+            background-color: var(--btn-success-bg);
             color: white;
         }
         
@@ -460,6 +536,8 @@
             width: 40px;
             text-align: center;
             font-weight: 500;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
         
         /* 词库管理弹窗样式 */
@@ -475,14 +553,15 @@
         }
         
         .library-modal-content {
-            background-color: white;
+            background-color: var(--container-bg);
             margin: 15% auto;
             padding: 20px;
-            border: 1px solid #888;
+            border: 1px solid var(--border-color);
             width: 80%;
             max-width: 600px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         
         .library-modal-header {
@@ -494,6 +573,8 @@
         
         .library-modal-header h3 {
             margin: 0;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
         
         .library-content {
@@ -506,18 +587,19 @@
             display: inline-block;
             padding: 8px 12px;
             margin: 5px;
-            background-color: #f0f0f0;
+            background-color: var(--border-color);
+            color: var(--text-color);
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         .char-item:hover {
-            background-color: #e0e0e0;
+            background-color: var(--btn-secondary-bg);
         }
         
         .char-item.active {
-            background-color: #3498db;
+            background-color: var(--btn-primary-bg);
             color: white;
         }
         
@@ -535,22 +617,24 @@
         }
         
         .library-section {
-            background-color: #f8f9fa;
+            background-color: var(--card-bg);
             padding: 15px;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         
         .library-section h4 {
             margin-top: 0;
             margin-bottom: 10px;
-            color: #495057;
+            color: var(--text-color);
+            transition: color 0.3s ease;
         }
         
         .library-textarea {
             width: 100%;
             height: 350px;
             padding: 12px;
-            border: 1px solid #ced4da;
+            border: 1px solid var(--input-border);
             border-radius: 4px;
             font-size: 14px;
             font-family: 'Courier New', monospace;
@@ -559,6 +643,9 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             overflow-y: auto;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         
         .library-actions {
@@ -705,17 +792,57 @@
             const textToCopy = resultElement.textContent;
             
             if (textToCopy && textToCopy !== '点击上方按钮生成地名' && textToCopy !== '生成中...') {
-                navigator.clipboard.writeText(textToCopy)
-                    .then(() => {
-                        alert('复制成功！');
-                    })
-                    .catch(err => {
-                        console.error('复制失败:', err);
-                        alert('复制失败，请手动复制');
-                    });
+                // 优先使用现代的 Clipboard API
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(textToCopy)
+                        .then(() => {
+                            alert('复制成功！');
+                        })
+                        .catch(err => {
+                            console.error('复制失败:', err);
+                            // 降级到传统方法
+                            fallbackCopyTextToClipboard(textToCopy);
+                        });
+                } else {
+                    // 使用传统方法作为降级方案
+                    fallbackCopyTextToClipboard(textToCopy);
+                }
             } else {
                 alert('没有可复制的内容');
             }
+        }
+        
+        // 降级复制方法，支持移动端
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            
+            // 设置样式，使其在页面上不可见但仍然可选中
+            textArea.style.position = 'fixed';
+            textArea.style.top = '-999999px';
+            textArea.style.left = '-999999px';
+            textArea.style.width = '2em';
+            textArea.style.height = '2em';
+            textArea.style.padding = '0';
+            textArea.style.border = 'none';
+            textArea.style.outline = 'none';
+            textArea.style.boxShadow = 'none';
+            textArea.style.background = 'transparent';
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                const msg = successful ? '复制成功！' : '复制失败，请手动复制';
+                alert(msg);
+            } catch (err) {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            }
+            
+            document.body.removeChild(textArea);
         }
         
         // 打开词库管理
@@ -1866,26 +1993,37 @@
                     historyItem.style.transform = 'scale(1.05)';
                     
                     // 点击复制到剪贴板
-                    navigator.clipboard.writeText(name)
-                        .then(() => {
-                            // 显示复制成功的反馈
-                            const originalText = historyItem.textContent;
-                            historyItem.textContent = '已复制！';
-                            setTimeout(() => {
-                                historyItem.textContent = originalText;
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(name)
+                            .then(() => {
+                                // 显示复制成功的反馈
+                                const originalText = historyItem.textContent;
+                                historyItem.textContent = '已复制！';
+                                setTimeout(() => {
+                                    historyItem.textContent = originalText;
+                                    // 恢复原始样式
+                                    historyItem.style.backgroundColor = '';
+                                    historyItem.style.color = '';
+                                    historyItem.style.transform = '';
+                                }, 1000);
+                            })
+                            .catch(err => {
+                                console.error('复制失败:', err);
+                                // 降级到传统方法
+                                fallbackCopyTextToClipboard(name);
                                 // 恢复原始样式
                                 historyItem.style.backgroundColor = '';
                                 historyItem.style.color = '';
                                 historyItem.style.transform = '';
-                            }, 1000);
-                        })
-                        .catch(err => {
-                            console.error('复制失败:', err);
-                            // 恢复原始样式
-                            historyItem.style.backgroundColor = '';
-                            historyItem.style.color = '';
-                            historyItem.style.transform = '';
-                        });
+                            });
+                    } else {
+                        // 使用传统方法作为降级方案
+                        fallbackCopyTextToClipboard(name);
+                        // 恢复原始样式
+                        historyItem.style.backgroundColor = '';
+                        historyItem.style.color = '';
+                        historyItem.style.transform = '';
+                    }
                 };
                 historyElement.appendChild(historyItem);
             });
@@ -2349,15 +2487,86 @@
             textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
         }
         
+        // 切换主题模式
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            
+            // 切换暗色模式类
+            body.classList.toggle('dark-mode');
+            
+            // 更新按钮图标
+            if (body.classList.contains('dark-mode')) {
+                themeToggleBtn.textContent = '☾';
+                // 保存主题偏好到本地存储
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggleBtn.textContent = '☀';
+                // 保存主题偏好到本地存储
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        
+        // 加载保存的主题偏好
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            
+            if (savedTheme === 'dark' || (savedTheme === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                body.classList.add('dark-mode');
+                if (themeToggleBtn) {
+                    themeToggleBtn.textContent = '☾';
+                }
+            } else {
+                body.classList.remove('dark-mode');
+                if (themeToggleBtn) {
+                    themeToggleBtn.textContent = '☀';
+                }
+            }
+        }
+        
+        // 滚动到页面顶部
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 滚动到页面底部
+        function scrollToBottom() {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+        
         // 页面加载完成后初始化
         window.onload = function() {
             initPlaceNameChars();
             initCharacterInputs();
             updateGenerateCount();
+            loadSavedTheme();
         };
     </script>
-    <footer style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
-        <p>项目源码：<a href="https://github.com/Shomota/name-generator" target="_blank">GitHub</a></p>
+    <!-- 固定的功能按钮 -->
+    <div style="position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 999;">
+        <button id="scroll-top-btn" onclick="scrollToTop()" class="btn btn-secondary" style="padding: 10px; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+            ↑
+        </button>
+        <button id="scroll-bottom-btn" onclick="scrollToBottom()" class="btn btn-secondary" style="padding: 10px; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+            ↓
+        </button>
+        <button id="theme-toggle" onclick="toggleTheme()" class="btn btn-secondary" style="padding: 10px; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+            ☀
+        </button>
+    </div>
+    
+    <footer style="text-align: center; margin-top: 30px; padding: 20px; background-color: var(--footer-bg); border-top: 1px solid var(--border-color); transition: background-color 0.3s ease, border-color 0.3s ease;">
+        <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <p>项目源码：<a href="https://github.com/Shomota/name-generator" target="_blank" style="color: var(--text-color); transition: color 0.3s ease;">GitHub</a></p>
+        </div>
     </footer>
 </body>
 </html>
