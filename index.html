@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地名生成器</title>
+    <title>组合地名生成器</title>
     <style>
         * {
             margin: 0;
@@ -47,6 +47,13 @@
             .button-container button {
                 width: 100%;
                 max-width: 300px;
+                height: 48px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                font-family: 'Arial', sans-serif;
+                font-weight: 500;
             }
             
             .character-settings-header {
@@ -116,31 +123,6 @@
             color: #666;
         }
         
-        .button-container {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        #generate-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        #generate-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        #generate-btn:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        
         .result-container {
             margin-top: 30px;
             padding: 20px;
@@ -168,39 +150,19 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-        }
-        
-        .button-container button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            min-width: 120px;
-            text-align: center;
-        }
-        
-        .button-container button:hover {
-            background-color: #2980b9;
-        }
-        
-        .button-container button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
+            margin-bottom: 30px;
         }
         
         /* 统一按钮样式 */
         .btn {
             border: none;
             padding: 10px 18px;
-            font-size: 14px;
+            font-size: 16px;
+            font-family: 'Arial', sans-serif;
+            font-weight: 500;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
         }
         
         .btn:hover {
@@ -305,71 +267,7 @@
             box-shadow: none;
         }
         
-        /* 操作按钮组 */
-        .action-btn-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            border: none;
-            padding: 10px 16px;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .action-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-        
-        .action-btn:nth-child(1) {
-            background-color: #27ae60;
-            color: white;
-        }
-        
-        .action-btn:nth-child(1):hover {
-            background-color: #229954;
-        }
-        
-        .action-btn:nth-child(2) {
-            background-color: #e74c3c;
-            color: white;
-        }
-        
-        .action-btn:nth-child(2):hover {
-            background-color: #c0392b;
-        }
-        
-        .action-btn:nth-child(3) {
-            background-color: #f39c12;
-            color: white;
-        }
-        
-        .action-btn:nth-child(3):hover {
-            background-color: #e67e22;
-        }
-        
-        .action-btn:nth-child(4) {
-            background-color: #9b59b6;
-            color: white;
-        }
-        
-        .action-btn:nth-child(4):hover {
-            background-color: #8e44ad;
-        }
-        
-        .action-btn:nth-child(5) {
-            background-color: #1abc9c;
-            color: white;
-        }
-        
-        .action-btn:nth-child(5):hover {
-            background-color: #16a085;
-        }
+
         
         .history-container {
             margin-top: 30px;
@@ -438,19 +336,7 @@
             min-width: 150px;
         }
         
-        .setting-item button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .setting-item button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
+
         
         .character-settings-container {
             margin-top: 20px;
@@ -610,13 +496,6 @@
             margin: 0;
         }
         
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
         .library-content {
             max-height: 400px;
             overflow-y: auto;
@@ -646,40 +525,6 @@
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
-        }
-        
-        .add-char-input {
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            margin-right: 10px;
-        }
-        
-        .add-char-btn {
-            padding: 8px 16px;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .remove-char-btn {
-            padding: 8px 16px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .save-char-btn {
-            padding: 8px 16px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
         }
         
         .library-panel {
@@ -722,51 +567,6 @@
             flex-wrap: wrap;
         }
         
-        .action-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-        }
-        
-        .action-btn:nth-child(1) {
-            background-color: #27ae60;
-            color: white;
-        }
-        
-        .action-btn:nth-child(1):hover {
-            background-color: #229954;
-        }
-        
-        .action-btn:nth-child(2) {
-            background-color: #e74c3c;
-            color: white;
-        }
-        
-        .action-btn:nth-child(2):hover {
-            background-color: #c0392b;
-        }
-        
-        .action-btn:nth-child(3) {
-            background-color: #f39c12;
-            color: white;
-        }
-        
-        .action-btn:nth-child(3):hover {
-            background-color: #e67e22;
-        }
-        
-        .action-btn:nth-child(4) {
-            background-color: #9b59b6;
-            color: white;
-        }
-        
-        .action-btn:nth-child(4):hover {
-            background-color: #8e44ad;
-        }
-        
         /* 隐藏的文件输入 */
         #file-input {
             display: none;
@@ -775,13 +575,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>地名生成器</h1>
+        <h1>组合地名生成器</h1>
         <p>使用本地中文地名用词库，随机组合生成全新的地名</p>
         
         <!-- 字符设置区域 -->
         <div class="character-settings-container">
             <h3>字符设置</h3>
-            <div class="character-settings-header" style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <div class="character-settings-header" style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <label for="name-length">地名字数：</label>
                     <select id="name-length" onchange="updateCharacterInputs()" style="padding: 8px 12px; font-size: 14px; min-width: 100px;">
@@ -792,11 +592,13 @@
                     </select>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <label>词库管理：</label>
-                    <button type="button" onclick="openLibraryManagement()" style="background-color: #3498db; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; min-width: 120px; text-align: center;">打开词库管理</button>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <button type="button" onclick="clearAllCustomChars()" style="background-color: #e74c3c; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; min-width: 120px; text-align: center;">清空所有自定义字符</button>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label>词库管理：</label>
+                        <button type="button" onclick="openLibraryManagement()" class="btn btn-primary">打开词库管理</button>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <button type="button" onclick="clearAllCustomChars()" class="btn btn-danger">清空所有自定义字符</button>
+                    </div>
                 </div>
             </div>
             <div id="character-inputs">
@@ -815,9 +617,9 @@
                 </div>
             </div>
             <div class="button-container" style="margin-top: 15px;">
-                <button id="generate-btn" onclick="generatePlaceName()">生成单个地名</button>
-                <button id="generate-multiple-btn" onclick="generateMultiplePlaceNames()">生成多个地名 (<span id="btn-count">5</span>个)</button>
-                <button id="copy-btn" onclick="copyToClipboard()">复制结果</button>
+                <button id="generate-btn" onclick="generatePlaceName()" class="btn btn-primary">生成单个地名</button>
+                <button id="generate-multiple-btn" onclick="generateMultiplePlaceNames()" class="btn btn-primary">生成多个地名 (<span id="btn-count">5</span>个)</button>
+                <button id="copy-btn" onclick="copyToClipboard()" class="btn btn-primary">复制结果</button>
             </div>
         </div>
         
@@ -928,19 +730,18 @@
                     <div class="library-modal-content">
                         <div class="library-modal-header">
                             <h3>词库管理</h3>
-                            <button class="close-btn" onclick="closeLibraryModal()">&times;</button>
+                            <button class="btn btn-secondary" onclick="closeLibraryModal()" style="font-size: 24px; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
                         </div>
                         <div class="library-panel">
                             <div class="library-section">
                                 <h4>词库选择</h4>
                                 <select id="library-select" onchange="changeLibrary()" style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
                                 <div class="library-actions" style="flex-wrap: wrap;">
-                                    <button class="action-btn" onclick="addNewLibrary()">新增词库</button>
-                                    <button class="action-btn" onclick="renameLibrary()">重命名词库</button>
-                                    <button class="action-btn" onclick="deleteLibrary()">删除词库</button>
-                                    <button class="action-btn" onclick="importLibrary()">导入词库</button>
-                                    <button class="action-btn" onclick="exportLibrary()">导出词库</button>
-
+                                    <button class="btn btn-success" onclick="addNewLibrary()">新增</button>
+                                    <button class="btn btn-warning" onclick="renameLibrary()">重命名</button>
+                                    <button class="btn btn-danger" onclick="deleteLibrary()">删除</button>
+                                    <button class="btn btn-info" onclick="importLibrary()">导入</button>
+                                    <button class="btn btn-primary" onclick="exportLibrary()">导出</button>
                                 </div>
                             </div>
                             <div class="library-section">
@@ -949,7 +750,7 @@
                             </div>
                         </div>
                         <div class="library-controls">
-                            <button class="save-char-btn" onclick="saveLibraryChanges()">保存更改</button>
+                            <button class="btn btn-primary" onclick="saveLibraryChanges()">保存更改</button>
                         </div>
                     </div>
                 `;
@@ -1115,7 +916,7 @@
                     
                     // 创建全选按钮
                     const selectAllBtn = document.createElement('button');
-                    selectAllBtn.className = 'library-btn';
+                    selectAllBtn.className = 'btn btn-primary';
                     selectAllBtn.textContent = '全选';
                     selectAllBtn.style.padding = '3px 6px';
                     selectAllBtn.style.fontSize = '11px';
@@ -1130,7 +931,7 @@
                     
                     // 创建反选按钮
                     const invertBtn = document.createElement('button');
-                    invertBtn.className = 'library-btn';
+                    invertBtn.className = 'btn btn-warning';
                     invertBtn.textContent = '反选';
                     invertBtn.style.padding = '3px 6px';
                     invertBtn.style.fontSize = '11px';
@@ -1144,7 +945,7 @@
                     
                     // 创建清空按钮
                     const clearLibraryBtn = document.createElement('button');
-                    clearLibraryBtn.className = 'library-btn';
+                    clearLibraryBtn.className = 'btn btn-danger';
                     clearLibraryBtn.textContent = '清空';
                     clearLibraryBtn.style.padding = '3px 6px';
                     clearLibraryBtn.style.fontSize = '11px';
@@ -1277,10 +1078,25 @@
                     btnContainer.style.gap = '10px';
                     btnContainer.style.marginTop = '10px';
                     btnContainer.style.width = '100%';
+                    btnContainer.style.boxSizing = 'border-box';
+                    btnContainer.style.flexWrap = 'wrap';
+                    
+                    // 创建添加到词库按钮
+                    const addToLibraryBtn = document.createElement('button');
+                    addToLibraryBtn.className = 'btn btn-success';
+                    addToLibraryBtn.textContent = '添加到词库';
+                    addToLibraryBtn.style.flex = '1';
+                    addToLibraryBtn.style.whiteSpace = 'nowrap';
+                    addToLibraryBtn.onclick = (function(index) {
+                        return function() {
+                            addCharToLibrary(index);
+                        };
+                    })(inputCount);
+                    btnContainer.appendChild(addToLibraryBtn);
                     
                     // 创建从词库选择按钮
                     const selectFromLibraryBtn = document.createElement('button');
-                    selectFromLibraryBtn.className = 'library-btn';
+                    selectFromLibraryBtn.className = 'btn btn-primary';
                     selectFromLibraryBtn.textContent = '选字符';
                     selectFromLibraryBtn.style.flex = '1';
                     selectFromLibraryBtn.style.whiteSpace = 'nowrap';
@@ -1293,9 +1109,8 @@
                     
                     // 创建清空按钮
                     const clearBtn = document.createElement('button');
-                    clearBtn.className = 'library-btn';
+                    clearBtn.className = 'btn btn-danger';
                     clearBtn.textContent = '清空';
-                    clearBtn.style.backgroundColor = '#e74c3c'; // 红色背景
                     clearBtn.style.flex = '1';
                     clearBtn.style.whiteSpace = 'nowrap';
                     clearBtn.onclick = (function(index) {
@@ -1305,9 +1120,10 @@
                     })(inputCount);
                     btnContainer.appendChild(clearBtn);
                     
-                    charInputItem.appendChild(btnContainer);
-                    
                     characterInputGroup.appendChild(charInputItem);
+                    
+                    // 将按钮容器直接添加到输入组中，这样它会占满整个宽度
+                    characterInputGroup.appendChild(btnContainer);
                     
                     characterInputsElement.appendChild(characterInputGroup);
                     
@@ -1484,7 +1300,7 @@
         // 全选/取消全选词库
         function toggleSelectAllLibraries(index) {
             const libraryContainer = document.getElementById(`library-select-${index}`);
-            const selectAllBtn = libraryContainer.previousElementSibling.querySelector('.library-btn:first-child');
+            const selectAllBtn = libraryContainer.previousElementSibling.querySelector('.btn:first-child');
             if (libraryContainer && selectAllBtn) {
                 const checkboxes = libraryContainer.querySelectorAll('input[type="checkbox"]');
                 const currentState = selectAllBtn.dataset.state || 'select';
@@ -1605,7 +1421,7 @@
                     <div class="library-modal-content">
                         <div class="library-modal-header">
                             <h3>从词库选择字符</h3>
-                            <button class="close-btn" onclick="closeCharSelectModal()">&times;</button>
+                            <button class="btn btn-secondary" onclick="closeCharSelectModal()" style="font-size: 24px; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
                         </div>
                         <div class="library-content">
                             ${charItemsHTML}
@@ -1618,6 +1434,126 @@
             } catch (error) {
                 console.error('从词库选择字符失败:', error);
                 alert('从词库选择字符失败');
+            }
+        }
+        
+        // 添加字符到词库
+        function addCharToLibrary(index) {
+            try {
+                const settings = characterSettings[index];
+                if (!settings) {
+                    console.error(`找不到第${index}个字符的设置`);
+                    return;
+                }
+                
+                const customChar = document.getElementById(`custom-char-${index}`).value;
+                if (!customChar) {
+                    alert('请先输入要添加的字符');
+                    return;
+                }
+                
+                const type = settings.type || '单字';
+                const allLibraries = Object.keys(placeNameChars[type]);
+                
+                if (allLibraries.length === 0) {
+                    alert('该分类下没有可用词库');
+                    return;
+                }
+                
+                // 创建选择弹窗
+                let modal = document.getElementById('library-select-modal');
+                if (!modal) {
+                    modal = document.createElement('div');
+                    modal.id = 'library-select-modal';
+                    modal.className = 'library-modal';
+                    document.body.appendChild(modal);
+                }
+                
+                // 生成词库选择界面
+                let checkboxesHTML = '';
+                allLibraries.forEach(libraryName => {
+                    checkboxesHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <input type="checkbox" id="add-to-${libraryName}" value="${libraryName}" style="transform: scale(1.2); margin-right: 10px;">
+                            <label for="add-to-${libraryName}" style="font-size: 14px; cursor: pointer;">${libraryName}</label>
+                        </div>
+                    `;
+                });
+                
+                modal.innerHTML = `
+                    <div class="library-modal-content" style="max-width: 500px;">
+                        <div class="library-modal-header">
+                            <h3>选择要添加到的词库</h3>
+                            <button class="btn btn-secondary" onclick="closeLibrarySelectModal()" style="font-size: 24px; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                        </div>
+                        <div class="library-content" style="max-height: 300px; overflow-y: auto;">
+                            <p style="margin-bottom: 15px; font-size: 14px;">请选择要将 "${customChar}" 添加到的词库：</p>
+                            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e9ecef;">
+                                ${checkboxesHTML}
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                            <button class="btn btn-secondary" onclick="closeLibrarySelectModal()">取消</button>
+                            <button class="btn btn-primary" onclick="confirmAddToLibraries(${index}, '${customChar}', '${type}')">确认添加</button>
+                        </div>
+                    </div>
+                `;
+                
+                // 显示弹窗
+                modal.style.display = 'block';
+            } catch (error) {
+                console.error('添加字符到词库失败:', error);
+                alert('添加字符到词库失败');
+            }
+        }
+        
+        // 关闭词库选择弹窗
+        function closeLibrarySelectModal() {
+            const modal = document.getElementById('library-select-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 确认添加到词库
+        function confirmAddToLibraries(index, customChar, type) {
+            try {
+                const modal = document.getElementById('library-select-modal');
+                if (!modal) return;
+                
+                // 获取选中的词库
+                const checkboxes = modal.querySelectorAll('input[type="checkbox"]:checked');
+                const selectedLibraries = Array.from(checkboxes).map(cb => cb.value);
+                
+                if (selectedLibraries.length === 0) {
+                    alert('请至少选择一个词库');
+                    return;
+                }
+                
+                // 添加字符到选中的词库
+                let addedCount = 0;
+                selectedLibraries.forEach(libraryName => {
+                    if (placeNameChars[type][libraryName]) {
+                        // 检查字符是否已存在
+                        if (!placeNameChars[type][libraryName].includes(customChar)) {
+                            placeNameChars[type][libraryName].push(customChar);
+                            addedCount++;
+                        }
+                    }
+                });
+                
+                // 关闭弹窗
+                modal.style.display = 'none';
+                
+                // 显示结果
+                if (addedCount > 0) {
+                    alert(`成功添加字符到 ${addedCount} 个词库`);
+                } else {
+                    alert('字符已存在于所有选中的词库中');
+                }
+            } catch (error) {
+                console.error('确认添加到词库失败:', error);
+                alert('添加失败，请重试');
             }
         }
         
@@ -1712,6 +1648,74 @@
             }
         }
         
+        // 生成单个地名的核心逻辑
+        function generateSinglePlaceName(nameLength) {
+            let placeName = '';
+            let usedLength = 0;
+            
+            for (let i = 0; i < nameLength && usedLength < nameLength; i++) {
+                const settings = characterSettings[i];
+                if (!settings) {
+                    console.error(`找不到第${i}个字符的设置`);
+                    continue;
+                }
+                
+                let char;
+                if (settings.locked && settings.customChar) {
+                    // 使用锁定的自定义字符
+                    char = settings.customChar;
+                } else {
+                    // 从词库中随机选择字符
+                    let libraryNames = settings.libraries || [];
+                    const type = settings.type || '单字';
+                    
+                    // 如果没有选择词库，使用单个词库设置或默认词库
+                    if (libraryNames.length === 0) {
+                        let libraryName = settings.library || '';
+                        if (!libraryName) {
+                            // 选择该分类下的第一个可用词库
+                            const allLibraries = Object.keys(placeNameChars[type]);
+                            if (allLibraries.length > 0) {
+                                libraryName = allLibraries[0];
+                            } else {
+                                // 如果没有可用词库，使用单字分类下的第一个词库
+                                const singleCharLibraries = Object.keys(placeNameChars['单字']);
+                                if (singleCharLibraries.length > 0) {
+                                    libraryName = singleCharLibraries[0];
+                                } else {
+                                    throw new Error('没有可用的词库');
+                                }
+                            }
+                        }
+                        libraryNames = [libraryName];
+                    }
+                    
+                    // 收集所有选中词库的字符
+                    let allChars = [];
+                    libraryNames.forEach(libraryName => {
+                        const charArray = placeNameChars[type][libraryName] || [];
+                        allChars = allChars.concat(charArray);
+                    });
+                    
+                    if (allChars.length === 0) {
+                        throw new Error('所选词库为空，请先添加字符');
+                    }
+                    
+                    char = getRandomElement(allChars);
+                }
+                
+                placeName += char;
+                usedLength += char.length;
+            }
+            
+            // 确保生成的地名长度不超过设置的长度
+            if (placeName.length > nameLength) {
+                placeName = placeName.substring(0, nameLength);
+            }
+            
+            return placeName;
+        }
+        
         // 生成单个地名（支持锁定字符）
         function generatePlaceName() {
             try {
@@ -1739,83 +1743,25 @@
                     updateCharacterInputs();
                 }
                 
-                let placeName = '';
-                let usedLength = 0;
-                
-                for (let i = 0; i < nameLength && usedLength < nameLength; i++) {
-                    const settings = characterSettings[i];
-                    if (!settings) {
-                        console.error(`找不到第${i}个字符的设置`);
-                        continue;
-                    }
-                    
-                    let char;
-                    if (settings.locked && settings.customChar) {
-                        // 使用锁定的自定义字符
-                        char = settings.customChar;
-                    } else {
-                        // 从词库中随机选择字符
-                        let libraryNames = settings.libraries || [];
-                        const type = settings.type || '单字';
-                        
-                        // 如果没有选择词库，使用单个词库设置或默认词库
-                        if (libraryNames.length === 0) {
-                            let libraryName = settings.library || '';
-                            if (!libraryName) {
-                                // 选择该分类下的第一个可用词库
-                                const allLibraries = Object.keys(placeNameChars[type]);
-                                if (allLibraries.length > 0) {
-                                    libraryName = allLibraries[0];
-                                } else {
-                                    // 如果没有可用词库，使用单字分类下的第一个词库
-                                    const singleCharLibraries = Object.keys(placeNameChars['单字']);
-                                    if (singleCharLibraries.length > 0) {
-                                        libraryName = singleCharLibraries[0];
-                                    } else {
-                                        console.error('没有可用的词库');
-                                        resultElement.textContent = '错误：没有可用的词库';
-                                        return;
-                                    }
-                                }
-                            }
-                            libraryNames = [libraryName];
-                        }
-                        
-                        // 收集所有选中词库的字符
-                        let allChars = [];
-                        libraryNames.forEach(libraryName => {
-                            const charArray = placeNameChars[type][libraryName] || [];
-                            allChars = allChars.concat(charArray);
-                        });
-                        
-                        if (allChars.length === 0) {
-                            resultElement.textContent = '所选词库为空，请先添加字符';
-                            return;
-                        }
-                        
-                        char = getRandomElement(allChars);
-                    }
-                    
-                    placeName += char;
-                    usedLength += char.length;
-                }
-                
-                // 确保生成的地名长度不超过设置的长度
-                if (placeName.length > nameLength) {
-                    placeName = placeName.substring(0, nameLength);
-                }
+                const placeName = generateSinglePlaceName(nameLength);
                 
                 // 显示结果
                 setTimeout(() => {
-                    resultElement.textContent = placeName;
+                    // 保留之前的结果，新结果显示在前面
+                    const currentResult = resultElement.textContent;
+                    if (currentResult && currentResult !== '生成中...' && currentResult !== '点击上方按钮生成地名') {
+                        resultElement.textContent = placeName + '\n' + currentResult;
+                    } else {
+                        resultElement.textContent = placeName;
+                    }
                     // 添加到历史记录
                     addToHistory(placeName);
-                }, 500);
+                }, 0); // 使用0延迟，让浏览器有时间更新UI
             } catch (error) {
                 console.error('生成地名失败:', error);
                 const resultElement = document.getElementById('result');
                 if (resultElement) {
-                    resultElement.textContent = '生成失败，请重试';
+                    resultElement.textContent = error.message || '生成失败，请重试';
                 }
             }
         }
@@ -1823,23 +1769,23 @@
         // 生成多个地名（支持锁定字符）
         function generateMultiplePlaceNames() {
             try {
+                // 缓存DOM元素
                 const resultElement = document.getElementById('result');
-                if (!resultElement) {
-                    console.error('找不到result元素');
+                const nameLengthElement = document.getElementById('name-length');
+                const generateCountElement = document.getElementById('generate-count');
+                
+                if (!resultElement || !nameLengthElement || !generateCountElement) {
+                    console.error('找不到必要的DOM元素');
+                    if (resultElement) {
+                        resultElement.textContent = '错误：找不到设置元素';
+                    }
                     return;
                 }
                 
                 resultElement.textContent = '生成中...';
                 
-                const nameLengthElement = document.getElementById('name-length');
-                if (!nameLengthElement) {
-                    console.error('找不到name-length元素');
-                    resultElement.textContent = '错误：找不到设置元素';
-                    return;
-                }
-                
+                // 缓存值
                 const nameLength = parseInt(nameLengthElement.value) || 3;
-                const generateCountElement = document.getElementById('generate-count');
                 const generateCount = parseInt(generateCountElement.value) || 5;
                 
                 console.log('生成地名字数:', nameLength);
@@ -1853,87 +1799,33 @@
                 
                 const placeNames = [];
                 
+                // 批量生成地名
                 for (let j = 0; j < generateCount; j++) {
-                    let placeName = '';
-                    let usedLength = 0;
-                    
-                    for (let i = 0; i < nameLength && usedLength < nameLength; i++) {
-                        const settings = characterSettings[i];
-                        if (!settings) {
-                            console.error(`找不到第${i}个字符的设置`);
-                            continue;
-                        }
-                        
-                        let char;
-                        if (settings.locked && settings.customChar) {
-                            // 使用锁定的自定义字符
-                            char = settings.customChar;
-                        } else {
-                            // 从词库中随机选择字符
-                            let libraryNames = settings.libraries || [];
-                            const type = settings.type || '单字';
-                            
-                            // 如果没有选择词库，使用单个词库设置或默认词库
-                            if (libraryNames.length === 0) {
-                                let libraryName = settings.library || '';
-                                if (!libraryName) {
-                                    // 选择该分类下的第一个可用词库
-                                    const allLibraries = Object.keys(placeNameChars[type]);
-                                    if (allLibraries.length > 0) {
-                                        libraryName = allLibraries[0];
-                                    } else {
-                                        // 如果没有可用词库，使用单字分类下的第一个词库
-                                        const singleCharLibraries = Object.keys(placeNameChars['单字']);
-                                        if (singleCharLibraries.length > 0) {
-                                            libraryName = singleCharLibraries[0];
-                                        } else {
-                                            console.error('没有可用的词库');
-                                            resultElement.textContent = '错误：没有可用的词库';
-                                            return;
-                                        }
-                                    }
-                                }
-                                libraryNames = [libraryName];
-                            }
-                            
-                            // 收集所有选中词库的字符
-                            let allChars = [];
-                            libraryNames.forEach(libraryName => {
-                                const charArray = placeNameChars[type][libraryName] || [];
-                                allChars = allChars.concat(charArray);
-                            });
-                            
-                            if (allChars.length === 0) {
-                                resultElement.textContent = '所选词库为空，请先添加字符';
-                                return;
-                            }
-                            
-                            char = getRandomElement(allChars);
-                        }
-                        
-                        placeName += char;
-                        usedLength += char.length;
-                    }
-                    
-                    // 确保生成的地名长度不超过设置的长度
-                    if (placeName.length > nameLength) {
-                        placeName = placeName.substring(0, nameLength);
-                    }
-                    
+                    const placeName = generateSinglePlaceName(nameLength);
                     placeNames.push(placeName);
+                }
+                
+                // 批量添加到历史记录
+                for (let i = placeNames.length - 1; i >= 0; i--) {
+                    addToHistory(placeNames[i]);
                 }
                 
                 // 显示结果
                 setTimeout(() => {
-                    resultElement.textContent = placeNames.join('\n');
-                    // 添加到历史记录
-                    placeNames.forEach(name => addToHistory(name));
-                }, 500);
+                    // 保留之前的结果，新结果显示在前面
+                    const currentResult = resultElement.textContent;
+                    const newResults = placeNames.join('\n');
+                    if (currentResult && currentResult !== '生成中...' && currentResult !== '点击上方按钮生成地名') {
+                        resultElement.textContent = newResults + '\n' + currentResult;
+                    } else {
+                        resultElement.textContent = newResults;
+                    }
+                }, 0); // 使用0延迟，让浏览器有时间更新UI
             } catch (error) {
                 console.error('生成多个地名失败:', error);
                 const resultElement = document.getElementById('result');
                 if (resultElement) {
-                    resultElement.textContent = '生成失败，请重试';
+                    resultElement.textContent = error.message || '生成失败，请重试';
                 }
             }
         }
@@ -1944,12 +1836,12 @@
             
             // 限制历史记录数量
             if (placeNameHistory.length >= 50) {
-                placeNameHistory.shift();
+                placeNameHistory.pop();
             }
             
             // 避免重复
             if (!placeNameHistory.includes(placeName)) {
-                placeNameHistory.push(placeName);
+                placeNameHistory.unshift(placeName);
             }
             
             // 更新历史记录显示
@@ -2198,28 +2090,74 @@
         
         // 导入词库
         function importLibrary() {
-            // 让用户选择导入分类
-            const categories = ['单字', '双字词', '三字词', '四字词'];
-            const category = prompt(`请选择导入词库的分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
-            
-            let selectedCategory;
-            switch(category) {
-                case '1':
-                    selectedCategory = '单字';
-                    break;
-                case '2':
-                    selectedCategory = '双字词';
-                    break;
-                case '3':
-                    selectedCategory = '三字词';
-                    break;
-                case '4':
-                    selectedCategory = '四字词';
-                    break;
-                default:
-                    selectedCategory = '单字'; // 默认分类
+            // 创建选择分类弹窗
+            let modal = document.getElementById('import-category-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'import-category-modal';
+                modal.className = 'library-modal';
+                document.body.appendChild(modal);
             }
             
+            // 生成分类选择界面
+            const categories = ['单字', '双字词', '三字词', '四字词'];
+            let categoriesHTML = '';
+            categories.forEach(category => {
+                categoriesHTML += `
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="radio" name="import-category" value="${category}" style="transform: scale(1.2); margin-right: 10px;">
+                        <label for="import-${category}" style="font-size: 14px; cursor: pointer;">${category}</label>
+                    </div>
+                `;
+            });
+            
+            modal.innerHTML = `
+                <div class="library-modal-content" style="max-width: 500px;">
+                    <div class="library-modal-header">
+                        <h3>选择导入分类</h3>
+                        <button class="btn btn-secondary" onclick="closeImportModal()" style="font-size: 24px; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                    </div>
+                    <div class="library-content" style="max-height: 300px; overflow-y: auto;">
+                        <p style="margin-bottom: 15px; font-size: 14px;">请选择要导入词库的分类：</p>
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e9ecef;">
+                            ${categoriesHTML}
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-secondary" onclick="closeImportModal()">取消</button>
+                        <button class="btn btn-primary" onclick="confirmImportCategory()">确认选择</button>
+                    </div>
+                </div>
+            `;
+            
+            // 显示弹窗
+            modal.style.display = 'block';
+        }
+        
+        function closeImportModal() {
+            const modal = document.getElementById('import-category-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        function confirmImportCategory() {
+            const modal = document.getElementById('import-category-modal');
+            if (!modal) return;
+            
+            // 获取选中的分类
+            const selectedRadio = modal.querySelector('input[name="import-category"]:checked');
+            if (!selectedRadio) {
+                alert('请选择一个分类');
+                return;
+            }
+            
+            const selectedCategory = selectedRadio.value;
+            
+            // 关闭分类选择弹窗
+            modal.style.display = 'none';
+            
+            // 打开文件选择
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.txt';
@@ -2265,33 +2203,140 @@
         
         // 导出词库
         function exportLibrary() {
-            const selectElement = document.getElementById('library-select');
-            if (!selectElement) return;
+            // 创建选择词库弹窗
+            let modal = document.getElementById('export-library-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'export-library-modal';
+                modal.className = 'library-modal';
+                document.body.appendChild(modal);
+            }
             
-            const selectedValue = selectElement.value;
-            if (!selectedValue) return;
+            // 生成词库选择界面
+            let checkboxesHTML = '';
             
-            // 解析选择的值，格式为 "category/library"
-            const [category, libraryName] = selectedValue.split('/');
-            if (!category || !libraryName) return;
+            // 遍历所有分类和词库
+            Object.entries(placeNameChars).forEach(([category, libraries]) => {
+                checkboxesHTML += `<h5 style="margin-top: 15px; margin-bottom: 10px; color: #495057;">${category}</h5>`;
+                
+                Object.keys(libraries).forEach(libraryName => {
+                    checkboxesHTML += `
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <input type="checkbox" id="export-${category}-${libraryName}" value="${category}/${libraryName}" style="transform: scale(1.2); margin-right: 10px;">
+                            <label for="export-${category}-${libraryName}" style="font-size: 14px; cursor: pointer;">${libraryName}</label>
+                        </div>
+                    `;
+                });
+            });
             
-            const charArray = placeNameChars[category][libraryName] || [];
-            const content = charArray.join(' ');
+            modal.innerHTML = `
+                <div class="library-modal-content" style="max-width: 600px;">
+                    <div class="library-modal-header">
+                        <h3>选择要导出的词库</h3>
+                        <button class="btn btn-secondary" onclick="closeExportModal()" style="font-size: 24px; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                    </div>
+                    <div class="library-content" style="max-height: 400px; overflow-y: auto;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <p style="margin: 0; font-size: 14px;">请选择要导出的词库：</p>
+                            <div style="display: flex; gap: 5px;">
+                                <button class="btn btn-primary" onclick="selectAllExportLibraries()" style="padding: 4px 10px; font-size: 12px;">全选</button>
+                                <button class="btn btn-warning" onclick="invertExportLibraries()" style="padding: 4px 10px; font-size: 12px;">反选</button>
+                                <button class="btn btn-danger" onclick="clearExportLibraries()" style="padding: 4px 10px; font-size: 12px;">清空</button>
+                            </div>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e9ecef;">
+                            ${checkboxesHTML}
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                        <button class="btn btn-secondary" onclick="closeExportModal()">取消</button>
+                        <button class="btn btn-primary" onclick="confirmExportLibraries()">确认导出</button>
+                    </div>
+                </div>
+            `;
             
-            // 创建Blob对象
-            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
+            // 显示弹窗
+            modal.style.display = 'block';
+        }
+        
+        function closeExportModal() {
+            const modal = document.getElementById('export-library-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        function selectAllExportLibraries() {
+            const modal = document.getElementById('export-library-modal');
+            if (!modal) return;
             
-            // 创建下载链接
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${libraryName}.txt`;
-            link.click();
+            const checkboxes = modal.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+        
+        function invertExportLibraries() {
+            const modal = document.getElementById('export-library-modal');
+            if (!modal) return;
             
-            // 释放URL
-            setTimeout(() => {
-                URL.revokeObjectURL(url);
-            }, 100);
+            const checkboxes = modal.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !checkbox.checked;
+            });
+        }
+        
+        function clearExportLibraries() {
+            const modal = document.getElementById('export-library-modal');
+            if (!modal) return;
+            
+            const checkboxes = modal.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+        
+        function confirmExportLibraries() {
+            const modal = document.getElementById('export-library-modal');
+            if (!modal) return;
+            
+            // 获取选中的词库
+            const checkboxes = modal.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedLibraries = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (selectedLibraries.length === 0) {
+                alert('请至少选择一个词库');
+                return;
+            }
+            
+            // 关闭弹窗
+            modal.style.display = 'none';
+            
+            // 导出每个选中的词库
+            selectedLibraries.forEach(libraryPath => {
+                const [category, libraryName] = libraryPath.split('/');
+                if (!category || !libraryName) return;
+                
+                const charArray = placeNameChars[category][libraryName] || [];
+                const content = charArray.join(' ');
+                
+                // 创建Blob对象
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${libraryName}.txt`;
+                link.click();
+                
+                // 释放URL
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 100);
+            });
+            
+            alert(`成功导出 ${selectedLibraries.length} 个词库`);
         }
         
         // 更新词库文本框
@@ -2299,8 +2344,9 @@
             const textarea = document.getElementById('library-textarea');
             if (!textarea) return;
             
-            // 调整文本框内容的显示方式
-            // 这里可以添加自动调整文本框高度的逻辑
+            // 自动调整文本框高度以适应内容
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 500) + 'px';
         }
         
         // 页面加载完成后初始化
@@ -2310,8 +2356,8 @@
             updateGenerateCount();
         };
     </script>
-    <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
+    <footer style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-top: 1px solid #e9ecef;">
         <p>项目源码：<a href="https://github.com" target="_blank">GitHub</a></p>
-    </div>
+    </footer>
 </body>
 </html>
