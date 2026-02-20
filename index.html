@@ -489,7 +489,7 @@
             font-weight: 500;
         }
         
-        /* 字库管理弹窗样式 */
+        /* 词库管理弹窗样式 */
         .library-modal {
             display: none;
             position: fixed;
@@ -689,7 +689,7 @@
 <body>
     <div class="container">
         <h1>地名生成器</h1>
-        <p>使用本地中文地名用字库，随机组合生成全新的地名</p>
+        <p>使用本地中文地名用词库，随机组合生成全新的地名</p>
         
         <!-- 字符设置区域 -->
         <div class="character-settings-container">
@@ -705,8 +705,11 @@
                     </select>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <label>字库管理：</label>
-                    <button type="button" onclick="openLibraryManagement()" style="background-color: #3498db; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; min-width: 120px; text-align: center;">打开字库管理</button>
+                    <label>词库管理：</label>
+                    <button type="button" onclick="openLibraryManagement()" style="background-color: #3498db; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; min-width: 120px; text-align: center;">打开词库管理</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" onclick="clearAllCustomChars()" style="background-color: #e74c3c; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; min-width: 120px; text-align: center;">清空所有自定义字符</button>
                 </div>
             </div>
             <div id="character-inputs">
@@ -744,46 +747,43 @@
     </div>
     
     <script>
-        // 地名用字库 - 层级结构：单字、双字、三字词
+        // 地名用词库 - 层级结构：单字、双字、三字词
         let placeNameChars = {
             '单字': {
-                '默认': ['东', '南', '西', '北', '中', '大', '小', '新', '旧', '高', '低', '长', '短', '宽', '窄', '深', '浅', '平', '陡', '弯', '直', '正', '偏', '内', '外', '里', '边', '沿', '旁', '间', '心', '尖', '顶', '底', '头', '尾', '口', '根', '源', '流', '起', '始', '首', '初', '开', '进', '来', '往', '迎', '接', '通', '达', '连', '交', '汇', '聚', '合', '同', '共', '群', '众', '多', '少', '盛', '兴', '荣', '生', '存', '有', '实', '真', '善', '美', '好', '优', '强', '胜', '得', '成', '功', '是', '对', '正', '明', '光', '亮', '清', '净', '洁', '纯', '整', '齐', '治', '安', '稳', '定', '静', '宁', '和', '平', '睦', '友', '亲', '厚', '浓', '密', '稠', '满', '充', '足', '全', '完', '良', '精', '细', '巧', '灵', '智', '聪', '慧', '贤', '能', '勇', '刚', '坚', '固', '顺', '利', '福', '吉', '祥', '瑞', '喜', '乐', '欢', '合', '聚', '团', '圆', '满', '增', '升', '涨', '起', '旺', '重', '宏', '巨', '大', '广', '阔', '辽', '远', '深', '高', '耸', '巍', '峨', '峻', '秀', '幽', '雅', '静', '动', '灵', '活', '巧', '妙', '奇', '特', '异', '独'],
-                '形容词': ['大', '小', '新', '旧', '老', '古', '远', '近', '高', '低', '长', '短', '宽', '窄', '深', '浅', '平', '陡', '弯', '直', '正', '偏', '内', '外', '里', '边', '沿', '旁', '间', '心', '尖', '顶', '底', '头', '尾', '口', '根', '源', '流', '起', '始', '首', '初', '开', '进', '来', '往', '迎', '接', '通', '达', '连', '交', '汇', '聚', '合', '同', '共', '群', '众', '多', '少', '盛', '兴', '荣', '生', '存', '有', '实', '真', '善', '美', '好', '优', '强', '胜', '得', '成', '功', '是', '对', '正', '明', '光', '亮', '清', '净', '洁', '纯', '整', '齐', '治', '安', '稳', '定', '静', '宁', '和', '平', '睦', '友', '亲', '厚', '浓', '密', '稠', '满', '充', '足', '全', '完', '良', '精', '细', '巧', '灵', '智', '聪', '慧', '贤', '能', '勇', '刚', '坚', '固', '顺', '利', '福', '吉', '祥', '瑞', '喜', '乐', '欢', '合', '聚', '团', '圆', '满', '增', '升', '涨', '起', '旺', '重', '宏', '巨', '大', '广', '阔', '辽', '远', '深', '高', '耸', '巍', '峨', '峻', '秀', '幽', '雅', '静', '动', '灵', '活', '巧', '妙', '奇', '特', '异', '独'],
-                '方位词': ['东', '南', '西', '北', '中', '上', '下', '左', '右', '前', '后', '内', '外', '里', '外', '间', '旁', '侧', '边', '沿', '顶', '底', '头', '尾', '口', '根', '梢', '源', '流', '起', '止', '始', '终', '首', '末', '初', '开', '关', '进', '出', '入', '来', '去', '往', '返', '迎', '送', '接', '通', '达', '连', '交', '汇', '聚', '散', '合', '分', '同', '异', '共', '独', '群', '孤', '众', '寡'],
-                '水体': ['水', '河', '江', '湖', '海', '洋', '溪', '流', '泉', '瀑', '潭', '池', '塘', '沟', '渠', '井', '源', '涧', '峡', '谷', '湾', '港', '渡', '津', '滩', '岸', '堤', '坝', '堰', '闸', '桥', '洲', '渚', '礁', '屿', '岛'],
-                '地形': ['山', '峰', '岭', '岗', '丘', '陵', '原', '野', '川', '地', '田', '园', '林', '森', '树', '木', '花', '草', '竹', '梅', '兰', '菊', '松', '柏', '枫', '桐', '柳', '杨', '槐', '榆', '杉', '桂', '荷', '莲', '桃', '李', '杏', '梨', '枣', '栗', '柿', '桔', '柚', '橙', '柑', '蕉', '苹', '莓', '葡', '萄', '樱', '枇', '杷', '荔', '枝', '龙', '眼', '芒', '果', '椰', '子', '橄', '榄'],
-                '区划': ['城', '镇', '市', '区', '县', '州', '省', '府', '道', '路', '街', '巷', '弄', '里', '坊', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '门', '桥', '渡', '港', '湾', '岛', '屿', '礁', '滩', '岸', '堤', '坝', '堰', '闸', '渠', '井', '泉', '池', '湖', '海', '河', '江', '溪', '涧', '谷', '峰', '岭', '山', '丘', '陵', '原', '野', '川', '地', '田', '园', '林', '森', '木', '竹', '花', '草', '树', '果', '瓜', '菜', '稻', '麦', '粱', '粟', '豆', '麻', '棉', '桑', '茶', '药', '材', '矿', '产', '宝', '藏'],
-                '动物': ['龙', '凤', '凰', '龟', '蛇', '虎', '豹', '狮', '象', '马', '牛', '羊', '猪', '狗', '猫', '兔', '鼠', '猴', '鸡', '鸭', '鹅', '鸽', '鹰', '鹤', '鹭', '鸥', '雁', '燕', '雀', '鸟', '鱼', '虾', '蟹', '鳖', '蛙', '蝉', '蟋', '蟀', '蝗', '虫', '螳', '螂', '蝴', '蝶', '蜻', '蜓', '蚯', '蚓', '蜗', '牛', '贝', '螺'],
-                '植物': ['树', '木', '花', '草', '竹', '梅', '兰', '菊', '松', '柏', '枫', '桐', '柳', '杨', '槐', '榆', '杉', '桂', '荷', '莲', '桃', '李', '杏', '梨', '枣', '栗', '柿', '桔', '柚', '橙', '柑', '蕉', '苹', '莓', '葡', '萄', '樱', '枇', '杷', '荔', '枝', '龙', '眼', '芒', '果', '椰', '子', '橄', '榄', '稻', '麦', '粱', '粟', '豆', '麻', '棉', '桑', '茶', '药', '材', '林', '森', '园', '田', '地', '土', '壤', '泥', '沙', '石', '岩'],
-                '矿产': ['金', '银', '铜', '铁', '锡', '铅', '锌', '铝', '钢', '煤', '炭', '油', '气', '火', '光', '电', '风', '水', '光', '热', '石', '玉', '宝', '藏', '矿', '产', '砂', '岩', '土', '泥', '沙', '石'],
-                '建筑': ['城', '墙', '门', '楼', '阁', '亭', '台', '榭', '轩', '堂', '馆', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '桥', '塔', '寺', '庙', '观', '庵', '堂', '宫', '殿', '楼', '阁', '亭', '台', '榭', '轩', '堂', '馆', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '门', '桥', '塔', '墙', '门', '路', '街', '巷', '弄', '里', '坊', '院', '园', '庄', '寨', '堡', '营', '卫', '所', '关', '隘', '口', '门', '桥', '塔', '楼', '阁', '亭', '台', '榭', '轩', '堂', '馆', '院'],
+                '形容词': ['大', '小', '高', '低', '长', '短', '宽', '窄', '深', '浅', '新', '旧', '富', '贫', '清', '浊', '明', '暗', '平', '陡', '斜', '峻', '秀', '美', '丽', '奇', '险', '幽', '静', '惠', '优', '荒', '寒', '暖', '湿', '干', '凉'],
+                '方位词': ['东', '南', '西', '北', '中', '前', '后', '左', '右', '上', '下', '内', '外', '里', '外', '顶', '底', '阳', '阴'],
+                '水体': ['江', '河', '湖', '海', '洋', '溪', '涧', '泉', '潭', '池', '沱', '汊', '渡', '港', '湾', '洲', '滩', '沟', '渠', '塘', '泊', '源', '渚', '汀', '漕'],
+                '地形地貌': ['山', '岭', '峰', '岗', '坡', '坳', '岩', '崖', '峡', '谷', '坪', '坝', '垅', '垠', '垵', '塬', '墩', '岛', '礁', '洲', '洼', '丘', '壑', '墟', '沟', '盆'],
+                '行政区划或聚落': ['州', '郡', '府', '国', '省', '市', '区', '县', '镇', '乡', '村'],
+                '动物': ['龙', '虎', '豹', '狮', '象', '鹿', '麒', '麟', '鸾', '凤', '凰', '鹤', '鹰', '雁', '鱼', '鲤', '鲟', '鲲', '鲸', '蛇', '龟', '鳖', '蚌', '蝉', '蚕', '蚁', '蜂'],
+                '植物': ['松', '柏', '榕', '槐', '柳', '桃', '李', '梅', '兰', '竹', '菊', '荷', '莲', '芦', '苇', '葵', '榆', '桑', '棉', '麻', '榴', '樟', '桂', '榕', '枫', '榄'],
+                '矿产或自然物产': ['金', '银', '铜', '铁', '锡', '铅', '煤', '炭', '石', '玉', '珠', '宝', '砂', '砾', '琥', '珊'],
+                '建筑或人工构筑': ['桥', '塔', '楼', '台', '亭', '阁', '关', '城', '堡', '墙', '门', '户', '院', '庙', '观', '寺', '庵', '堂', '宫', '殿', '坞', '堤', '坝', '闸', '渡', '集', '圩', '场', '屯', '堡', '寨', '营', '哨', '墅'],
+                '道路': ['道', '路', '坊', '里', '巷', '街'],
                 '姓氏': ['王', '李', '张', '刘', '陈', '杨', '赵', '黄', '周', '吴', '徐', '孙', '马', '朱', '胡', '郭', '何', '高', '林', '罗', '郑', '梁', '谢', '宋', '唐', '许', '韩', '冯', '邓', '曹', '彭', '曾', '肖', '田', '董', '袁', '潘', '于', '蒋', '蔡', '余', '杜', '叶', '程', '苏', '魏', '吕', '丁', '任', '沈', '姚', '卢', '姜', '崔', '钟', '谭', '陆', '汪', '范', '金', '石', '廖', '贾', '夏', '韦', '付', '方', '白', '邹', '孟', '熊', '秦', '邱', '江', '尹', '薛', '闫', '段', '雷', '侯', '龙', '史', '陶', '黎', '贺', '顾', '毛', '郝', '龚', '邵', '万', '钱', '严', '覃', '武', '戴', '莫', '孔', '向', '汤']
             },
             '双字词': {
-                '默认': ['东方', '西方', '南方', '北方', '中央', '中原', '中华', '神州', '大地', '山河', '江河', '湖海', '山水', '江海', '湖泊', '河流', '山川', '平原', '高原', '盆地', '丘陵', '山地', '森林', '草原', '沙漠', '戈壁', '岛屿', '半岛', '海峡', '海湾', '港口', '码头', '桥梁', '隧道', '公路', '铁路', '机场', '车站', '城市', '乡镇', '村庄', '社区', '街道', '广场', '公园', '花园', '园林', '建筑', '房屋', '大厦', '高楼', '别墅', '公寓', '酒店', '饭店', '商场', '超市', '市场', '商店', '店铺', '银行', '医院', '学校', '大学', '中学', '小学', '幼儿园', '图书馆', '博物馆', '展览馆', '体育馆', '运动场', '剧场', '影院', '音乐厅', '美术馆', '画廊', '寺庙', '教堂', '道观', '庵堂', '宫殿', '城堡', '要塞', '关口', '城门', '城墙', '城楼', '钟楼', '鼓楼', '塔寺', '亭台', '楼阁', '轩榭', '厅堂', '馆院'],
                 '方位': ['东方', '西方', '南方', '北方', '中央', '中原', '中华', '神州', '大地', '山河', '江河', '湖海', '山水', '江海', '湖泊', '河流', '山川'],
                 '地理': ['平原', '高原', '盆地', '丘陵', '山地', '森林', '草原', '沙漠', '戈壁', '岛屿', '半岛', '海峡', '海湾', '港口', '码头', '桥梁', '隧道', '公路', '铁路', '机场', '车站', '城市', '乡镇', '村庄', '社区', '街道', '广场', '公园', '花园', '园林'],
                 '建筑': ['建筑', '房屋', '大厦', '高楼', '别墅', '公寓', '酒店', '饭店', '商场', '超市', '市场', '商店', '店铺', '银行', '医院', '学校', '大学', '中学', '小学', '幼儿园', '图书馆', '博物馆', '展览馆', '体育馆', '运动场', '剧场', '影院', '音乐厅', '美术馆', '画廊', '寺庙', '教堂', '道观', '庵堂', '宫殿', '城堡', '要塞', '关口', '城门', '城墙', '城楼', '钟楼', '鼓楼', '塔寺', '亭台', '楼阁', '轩榭', '厅堂', '馆院']
             },
             '三字词': {
-                '默认': ['东方红', '太阳升', '新中国', '新时代', '新社会', '新国家', '新民族', '新人民', '新青年', '新少年', '新儿童', '新学生', '新老师', '新医生', '新护士', '新工人', '新农民', '新军人', '新警察', '新法官', '新律师', '新记者', '新编辑', '新作家', '新画家', '新音乐家', '新舞蹈家', '新演员', '新导演', '新摄影师', '新设计师', '新建筑师', '新工程师', '新科学家', '新发明家', '新企业家', '新商人', '新公务员', '新职员', '新员工', '新同事', '新朋友', '新邻居', '新同学', '新伙伴', '新成员', '新队员', '新团员', '新党员', '新市民', '新村民', '新居民', '新住户', '新租户', '新房东', '新租客', '新客户', '新顾客', '新用户', '新会员', '新粉丝', '新观众', '新听众', '新读者'],
                 '地理': ['东方红', '太阳升', '新中国', '新时代', '新社会', '新国家', '新民族', '新人民', '新青年', '新少年', '新儿童', '新学生', '新老师', '新医生', '新护士', '新工人', '新农民', '新军人', '新警察', '新法官', '新律师', '新记者', '新编辑', '新作家', '新画家', '新音乐家', '新舞蹈家', '新演员', '新导演', '新摄影师', '新设计师', '新建筑师', '新工程师', '新科学家', '新发明家', '新企业家', '新商人', '新公务员', '新职员', '新员工', '新同事', '新朋友', '新邻居', '新同学', '新伙伴', '新成员', '新队员', '新团员', '新党员', '新市民', '新村民', '新居民', '新住户', '新租户', '新房东', '新租客', '新客户', '新顾客', '新用户', '新会员', '新粉丝', '新观众', '新听众', '新读者'],
                 '建筑': ['黄鹤楼', '岳阳楼', '滕王阁', '鹳雀楼', '蓬莱阁', '大观楼', '光岳楼', '钟鼓楼', '天安门', '午门', '神武门', '东华门', '西华门', '太和殿', '中和殿', '保和殿', '乾清宫', '交泰殿', '坤宁宫', '御花园', '颐和园', '圆明园', '避暑山庄', '故宫', '长城', '天坛', '地坛', '日坛', '月坛', '社稷坛', '先农坛', '太庙', '孔庙', '国子监', '雍和宫', '白云观', '潭柘寺', '戒台寺', '红螺寺', '灵光寺', '法源寺', '广济寺', '报国寺', '卧佛寺', '碧云寺', '香山寺', '大觉寺']
             },
             '四字词': {
-                '默认': ['东方明珠', '西方极乐', '南方福地', '北方重镇', '中央枢纽', '中原大地', '中华神州', '神州大地', '锦绣山河', '壮丽山河', '大好河山', '山清水秀', '山高水长', '山明水秀', '山光水色', '山穷水尽', '山重水复', '山高水低', '山长水远', '山温水软', '山环水抱', '山崩水竭', '山寒水冷', '山遥水远', '山肤水豢', '山眉水眼', '山高水阔', '山高水险', '山高水远', '山高水长', '山高水深', '山高水低', '山高水险', '山高水长', '山高水深', '山高水低', '山高水险', '山高水长', '山高水深'],
                 '地理': ['东方明珠', '西方极乐', '南方福地', '北方重镇', '中央枢纽', '中原大地', '中华神州', '神州大地', '锦绣山河', '壮丽山河', '大好河山', '山清水秀', '山高水长', '山明水秀', '山光水色', '山穷水尽', '山重水复', '山高水低', '山长水远', '山温水软', '山环水抱', '山崩水竭', '山寒水冷', '山遥水远', '山肤水豢', '山眉水眼', '山高水阔', '山高水险', '山高水远', '山高水长', '山高水深'],
                 '建筑': ['紫禁城', '颐和园', '圆明园', '避暑山庄', '天安门广场', '人民大会堂', '故宫博物院', '国家博物馆', '军事博物馆', '历史博物馆', '自然博物馆', '科技博物馆', '艺术博物馆', '地质博物馆', '航空博物馆', '航海博物馆', '铁路博物馆', '汽车博物馆', '农业博物馆', '工业博物馆', '民族博物馆', '革命博物馆', '军事博物馆', '历史博物馆', '自然博物馆', '科技博物馆', '艺术博物馆', '地质博物馆', '航空博物馆', '航海博物馆']
             }
         };
         
-        // 初始化地名用字库
+        // 初始化地名用词库
         function initPlaceNameChars() {
             try {
-                document.getElementById('status').textContent = '初始化地名用字库...';
+                document.getElementById('status').textContent = '初始化地名用词库...';
                 document.getElementById('generate-btn').disabled = true;
                 
-                // 直接使用本地优化的地名用字库
+                // 直接使用本地优化的地名用词库
                 // 无需网络获取，使用精心设计的本地数据
                 
                 setTimeout(() => {
@@ -795,12 +795,12 @@
                         });
                     });
                     
-                    document.getElementById('status').textContent = `地名用字库初始化完成 (共 ${totalChars} 个用字)`;
+                    document.getElementById('status').textContent = `地名用词库初始化完成 (共 ${totalChars} 个用字)`;
                     document.getElementById('generate-btn').disabled = false;
                 }, 500);
             } catch (error) {
-                console.error('初始化地名用字库失败:', error);
-                document.getElementById('status').textContent = '初始化地名用字库失败';
+                console.error('初始化地名用词库失败:', error);
+                document.getElementById('status').textContent = '初始化地名用词库失败';
                 document.getElementById('generate-btn').disabled = false;
             }
         }
@@ -829,7 +829,7 @@
             }
         }
         
-        // 打开字库管理
+        // 打开词库管理
         function openLibraryManagement() {
             // 创建弹窗
             let modal = document.getElementById('library-modal');
@@ -840,25 +840,25 @@
                 modal.innerHTML = `
                     <div class="library-modal-content">
                         <div class="library-modal-header">
-                            <h3>字库管理</h3>
+                            <h3>词库管理</h3>
                             <button class="close-btn" onclick="closeLibraryModal()">&times;</button>
                         </div>
                         <div class="library-panel">
                             <div class="library-section">
-                                <h4>字库选择</h4>
+                                <h4>词库选择</h4>
                                 <select id="library-select" onchange="changeLibrary()" style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
                                 <div class="library-actions" style="flex-wrap: wrap;">
-                                    <button class="action-btn" onclick="addNewLibrary()">新增字库</button>
-                                    <button class="action-btn" onclick="renameLibrary()">重命名字库</button>
-                                    <button class="action-btn" onclick="deleteLibrary()">删除字库</button>
-                                    <button class="action-btn" onclick="importLibrary()">导入字库</button>
-                                    <button class="action-btn" onclick="exportLibrary()">导出字库</button>
+                                    <button class="action-btn" onclick="addNewLibrary()">新增词库</button>
+                                    <button class="action-btn" onclick="renameLibrary()">重命名词库</button>
+                                    <button class="action-btn" onclick="deleteLibrary()">删除词库</button>
+                                    <button class="action-btn" onclick="importLibrary()">导入词库</button>
+                                    <button class="action-btn" onclick="exportLibrary()">导出词库</button>
 
                                 </div>
                             </div>
                             <div class="library-section">
-                                <h4>字库内容（自动适应宽度）</h4>
-                                <textarea id="library-textarea" class="library-textarea" placeholder="在此输入字库内容，字符之间用空格或换行分隔"></textarea>
+                                <h4>词库内容（自动适应宽度）</h4>
+                                <textarea id="library-textarea" class="library-textarea" placeholder="在此输入词库内容，字符之间用空格或换行分隔"></textarea>
                             </div>
                         </div>
                         <div class="library-controls">
@@ -879,7 +879,7 @@
                 }
             }
             
-            // 初始化字库选择下拉框
+            // 初始化词库选择下拉框
             initLibrarySelect();
             
             updateLibraryTextarea();
@@ -892,7 +892,7 @@
         let characterSettings = [];
         
         // 历史记录数组
-        let history = [];
+        let placeNameHistory = [];
         
         // 初始化字符输入框
         function initCharacterInputs() {
@@ -943,7 +943,7 @@
                             index: inputCount,
                             locked: currentSettings[inputCount].locked || false,
                             customChar: currentSettings[inputCount].customChar || '',
-                            library: currentSettings[inputCount].library || '默认',
+                            library: currentSettings[inputCount].library || '',
                             type: currentSettings[inputCount].type || '单字'
                         };
                     } else {
@@ -952,7 +952,7 @@
                             index: inputCount,
                             locked: false,
                             customChar: '',
-                            library: '默认',
+                            library: '',
                             type: '单字'
                         };
                     }
@@ -999,14 +999,14 @@
                     typeSelectItem.appendChild(typeSelect);
                     characterInputGroup.appendChild(typeSelectItem);
                     
-                    // 创建字库选择
+                    // 创建词库选择
                     const librarySelectItem = document.createElement('div');
                     librarySelectItem.className = 'character-input-item';
                     
                     // 创建标签
                     const label = document.createElement('label');
                     label.htmlFor = `library-select-${inputCount}`;
-                    label.textContent = '字库选择：';
+                    label.textContent = '词库选择：';
                     librarySelectItem.appendChild(label);
                     
                     // 创建下拉框
@@ -1022,7 +1022,7 @@
                     // 动态生成选项，基于选择的词库类型
                     const currentType = settings.type || '单字';
                     const libraryNames = Object.keys(placeNameChars[currentType]);
-                    console.log('可用字库:', libraryNames);
+                    console.log('可用词库:', libraryNames);
                     
                     libraryNames.forEach(libraryName => {
                         const option = document.createElement('option');
@@ -1051,8 +1051,17 @@
                     const charInput = document.createElement('input');
                     charInput.type = 'text';
                     charInput.id = `custom-char-${inputCount}`;
-                    charInput.maxLength = 3; // 支持最长3个字符
-                    charInput.placeholder = '留空则随机';
+                    // 根据词库类型设置最大长度
+                    let maxLength = 1; // 默认单字词
+                    if (currentType === '双字词') {
+                        maxLength = 2;
+                    } else if (currentType === '三字词') {
+                        maxLength = 3;
+                    } else if (currentType === '四字词') {
+                        maxLength = 4;
+                    }
+                    charInput.maxLength = maxLength;
+                    charInput.placeholder = '输入来锁定字符';
                     charInput.value = settings.customChar || '';
                     // 使用闭包保存当前索引值
                     charInput.oninput = (function(index) {
@@ -1074,6 +1083,29 @@
                         lockStatus.className = 'lock-status';
                     }
                     charInputItem.appendChild(lockStatus);
+                    
+                    // 创建从词库选择按钮
+                    const selectFromLibraryBtn = document.createElement('button');
+                    selectFromLibraryBtn.className = 'library-btn';
+                    selectFromLibraryBtn.textContent = '从词库选择';
+                    selectFromLibraryBtn.onclick = (function(index) {
+                        return function() {
+                            selectCharFromLibrary(index);
+                        };
+                    })(inputCount);
+                    charInputItem.appendChild(selectFromLibraryBtn);
+                    
+                    // 创建清空按钮
+                    const clearBtn = document.createElement('button');
+                    clearBtn.className = 'library-btn';
+                    clearBtn.textContent = '清空';
+                    clearBtn.style.backgroundColor = '#e74c3c'; // 红色背景
+                    clearBtn.onclick = (function(index) {
+                        return function() {
+                            clearCustomChar(index);
+                        };
+                    })(inputCount);
+                    charInputItem.appendChild(clearBtn);
                     
                     characterInputGroup.appendChild(charInputItem);
                     
@@ -1170,12 +1202,12 @@
                 characterSettings[index].type = newType;
                 console.log(`第${index + 1}部分的词库类型已更新为: ${newType}`);
                 
-                // 更新字库选择下拉框
+                // 更新词库选择下拉框
                 if (librarySelect) {
                     // 清空现有选项
                     librarySelect.innerHTML = '';
                     
-                    // 添加新类型的字库选项
+                    // 添加新类型的词库选项
                     const libraryNames = Object.keys(placeNameChars[newType]);
                     libraryNames.forEach(libraryName => {
                         const option = document.createElement('option');
@@ -1184,8 +1216,23 @@
                         librarySelect.appendChild(option);
                     });
                     
-                    // 更新字库设置
-                    characterSettings[index].library = libraryNames[0] || '默认';
+                    // 更新词库设置
+                    characterSettings[index].library = libraryNames[0] || '';
+                }
+                
+                // 更新自定义字符输入框的最大长度
+                const charInput = document.getElementById(`custom-char-${index}`);
+                if (charInput) {
+                    // 根据词库类型设置最大长度
+                    let maxLength = 1; // 默认单字词
+                    if (newType === '双字词') {
+                        maxLength = 2;
+                    } else if (newType === '三字词') {
+                        maxLength = 3;
+                    } else if (newType === '四字词') {
+                        maxLength = 4;
+                    }
+                    charInput.maxLength = maxLength;
                 }
                 
                 // 更新字符输入框，根据词库类型和总地名字数调整输入框数量
@@ -1193,12 +1240,173 @@
             }
         }
         
-        // 更新字符字库
+        // 更新字符词库
         function updateCharacterLibrary(index) {
             const librarySelect = document.getElementById(`library-select-${index}`);
             if (librarySelect) {
                 characterSettings[index].library = librarySelect.value;
-                console.log(`第${index + 1}部分的字库已更新为: ${librarySelect.value}`);
+                console.log(`第${index + 1}部分的词库已更新为: ${librarySelect.value}`);
+            }
+        }
+        
+        // 从词库中选择字符
+        function selectCharFromLibrary(index) {
+            try {
+                const settings = characterSettings[index];
+                if (!settings) {
+                    console.error(`找不到第${index}个字符的设置`);
+                    return;
+                }
+                
+                let libraryName = settings.library || '';
+                const type = settings.type || '单字';
+                
+                // 如果词库未设置，选择该分类下的第一个可用词库
+                if (!libraryName) {
+                    const libraryNames = Object.keys(placeNameChars[type]);
+                    if (libraryNames.length > 0) {
+                        libraryName = libraryNames[0];
+                    } else {
+                        // 如果没有可用词库，使用单字分类下的第一个词库
+                        const singleCharLibraries = Object.keys(placeNameChars['单字']);
+                        if (singleCharLibraries.length > 0) {
+                            libraryName = singleCharLibraries[0];
+                        } else {
+                            alert('没有可用的词库');
+                            return;
+                        }
+                    }
+                }
+                
+                const charArray = placeNameChars[type][libraryName] || [];
+                if (charArray.length === 0) {
+                    alert(`词库 "${libraryName}" 为空，请先添加字符`);
+                    return;
+                }
+                
+                // 创建选择弹窗
+                let modal = document.getElementById('char-select-modal');
+                if (!modal) {
+                    modal = document.createElement('div');
+                    modal.id = 'char-select-modal';
+                    modal.className = 'library-modal';
+                    document.body.appendChild(modal);
+                }
+                
+                // 生成字符选择界面
+                let charItemsHTML = '';
+                charArray.forEach(char => {
+                    charItemsHTML += `<div class="char-item" onclick="selectChar('${char}', ${index})"><center>${char}</center></div>`;
+                });
+                
+                modal.innerHTML = `
+                    <div class="library-modal-content">
+                        <div class="library-modal-header">
+                            <h3>从词库选择字符</h3>
+                            <button class="close-btn" onclick="closeCharSelectModal()">&times;</button>
+                        </div>
+                        <div class="library-content">
+                            ${charItemsHTML}
+                        </div>
+                    </div>
+                `;
+                
+                // 显示弹窗
+                modal.style.display = 'block';
+            } catch (error) {
+                console.error('从词库选择字符失败:', error);
+                alert('从词库选择字符失败');
+            }
+        }
+        
+        // 选择字符
+        function selectChar(char, index) {
+            try {
+                // 填入自定义字符输入框
+                const charInput = document.getElementById(`custom-char-${index}`);
+                if (charInput) {
+                    charInput.value = char;
+                    // 更新自定义字符设置
+                    updateCustomChar(index);
+                }
+                
+                // 关闭弹窗
+                closeCharSelectModal();
+            } catch (error) {
+                console.error('选择字符失败:', error);
+            }
+        }
+        
+        // 关闭字符选择弹窗
+        function closeCharSelectModal() {
+            const modal = document.getElementById('char-select-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 清空所有自定义字符
+        function clearAllCustomChars() {
+            try {
+                // 确认用户是否要清空
+                if (!confirm('确定要清空所有自定义字符吗？')) {
+                    return;
+                }
+                
+                // 遍历所有字符设置
+                characterSettings.forEach((setting, index) => {
+                    // 清空自定义字符
+                    setting.customChar = '';
+                    setting.locked = false;
+                    
+                    // 更新输入框
+                    const charInput = document.getElementById(`custom-char-${index}`);
+                    if (charInput) {
+                        charInput.value = '';
+                    }
+                    
+                    // 更新锁定状态
+                    const lockStatus = document.getElementById(`lock-status-${index}`);
+                    if (lockStatus) {
+                        lockStatus.textContent = '留空随机';
+                        lockStatus.className = 'lock-status';
+                    }
+                });
+                
+                // 刷新字符输入框
+                updateCharacterInputs();
+                
+                // 显示成功消息
+                alert('所有自定义字符已清空');
+            } catch (error) {
+                console.error('清空自定义字符失败:', error);
+                alert('清空自定义字符失败');
+            }
+        }
+        
+        // 清空单个自定义字符
+        function clearCustomChar(index) {
+            try {
+                // 清空自定义字符
+                if (characterSettings[index]) {
+                    characterSettings[index].customChar = '';
+                    characterSettings[index].locked = false;
+                    
+                    // 更新输入框
+                    const charInput = document.getElementById(`custom-char-${index}`);
+                    if (charInput) {
+                        charInput.value = '';
+                    }
+                    
+                    // 更新锁定状态
+                    const lockStatus = document.getElementById(`lock-status-${index}`);
+                    if (lockStatus) {
+                        lockStatus.textContent = '留空随机';
+                        lockStatus.className = 'lock-status';
+                    }
+                }
+            } catch (error) {
+                console.error('清空自定义字符失败:', error);
             }
         }
         
@@ -1244,13 +1452,31 @@
                         // 使用锁定的自定义字符
                         char = settings.customChar;
                     } else {
-                        // 从字库中随机选择字符
-                        const libraryName = settings.library || '默认';
+                        // 从词库中随机选择字符
+                        let libraryName = settings.library || '';
                         const type = settings.type || '单字';
+                        
+                        // 如果词库未设置，选择该分类下的第一个可用词库
+                        if (!libraryName) {
+                            const libraryNames = Object.keys(placeNameChars[type]);
+                            if (libraryNames.length > 0) {
+                                libraryName = libraryNames[0];
+                            } else {
+                                // 如果没有可用词库，使用单字分类下的第一个词库
+                                const singleCharLibraries = Object.keys(placeNameChars['单字']);
+                                if (singleCharLibraries.length > 0) {
+                                    libraryName = singleCharLibraries[0];
+                                } else {
+                                    console.error('没有可用的词库');
+                                    resultElement.textContent = '错误：没有可用的词库';
+                                    return;
+                                }
+                            }
+                        }
                         const charArray = placeNameChars[type][libraryName] || [];
                         
                         if (charArray.length === 0) {
-                            resultElement.textContent = `字库 "${libraryName}" 为空，请先添加字符`;
+                            resultElement.textContent = `词库 "${libraryName}" 为空，请先添加字符`;
                             return;
                         }
                         
@@ -1330,13 +1556,31 @@
                             // 使用锁定的自定义字符
                             char = settings.customChar;
                         } else {
-                            // 从字库中随机选择字符
-                            const libraryName = settings.library || '默认';
+                            // 从词库中随机选择字符
+                            let libraryName = settings.library || '';
                             const type = settings.type || '单字';
+                            
+                            // 如果词库未设置，选择该分类下的第一个可用词库
+                            if (!libraryName) {
+                                const libraryNames = Object.keys(placeNameChars[type]);
+                                if (libraryNames.length > 0) {
+                                    libraryName = libraryNames[0];
+                                } else {
+                                    // 如果没有可用词库，使用单字分类下的第一个词库
+                                    const singleCharLibraries = Object.keys(placeNameChars['单字']);
+                                    if (singleCharLibraries.length > 0) {
+                                        libraryName = singleCharLibraries[0];
+                                    } else {
+                                        console.error('没有可用的词库');
+                                        resultElement.textContent = '错误：没有可用的词库';
+                                        return;
+                                    }
+                                }
+                            }
                             const charArray = placeNameChars[type][libraryName] || [];
                             
                             if (charArray.length === 0) {
-                                resultElement.textContent = `字库 "${libraryName}" 为空，请先添加字符`;
+                                resultElement.textContent = `词库 "${libraryName}" 为空，请先添加字符`;
                                 return;
                             }
                             
@@ -1375,13 +1619,13 @@
             if (!placeName) return;
             
             // 限制历史记录数量
-            if (history.length >= 50) {
-                history.shift();
+            if (placeNameHistory.length >= 50) {
+                placeNameHistory.shift();
             }
             
             // 避免重复
-            if (!history.includes(placeName)) {
-                history.push(placeName);
+            if (!placeNameHistory.includes(placeName)) {
+                placeNameHistory.push(placeName);
             }
             
             // 更新历史记录显示
@@ -1395,7 +1639,7 @@
             
             historyElement.innerHTML = '';
             
-            history.forEach(name => {
+            placeNameHistory.forEach(name => {
                 const historyItem = document.createElement('div');
                 historyItem.className = 'history-item';
                 historyItem.textContent = name;
@@ -1444,7 +1688,7 @@
             }
         }
         
-        // 关闭字库管理弹窗
+        // 关闭词库管理弹窗
         function closeLibraryModal() {
             const modal = document.getElementById('library-modal');
             if (modal) {
@@ -1452,14 +1696,14 @@
             }
         }
         
-        // 初始化字库选择下拉框
+        // 初始化词库选择下拉框
         function initLibrarySelect() {
             const selectElement = document.getElementById('library-select');
             if (!selectElement) return;
             
             selectElement.innerHTML = '';
             
-            // 遍历所有字库并添加到下拉框
+            // 遍历所有词库并添加到下拉框
             Object.keys(placeNameChars).forEach(category => {
                 const categoryOption = document.createElement('option');
                 categoryOption.value = category;
@@ -1475,7 +1719,7 @@
                 });
             });
             
-            // 默认选择第一个可用字库
+            // 默认选择第一个可用词库
             if (selectElement.options.length > 0) {
                 for (let i = 0; i < selectElement.options.length; i++) {
                     if (!selectElement.options[i].disabled) {
@@ -1487,7 +1731,7 @@
             }
         }
         
-        // 切换字库
+        // 切换词库
         function changeLibrary() {
             const selectElement = document.getElementById('library-select');
             const textareaElement = document.getElementById('library-textarea');
@@ -1519,26 +1763,26 @@
             const [category, libraryName] = selectedValue.split('/');
             if (!category || !libraryName) return;
             
-            // 从文本框中读取字库内容
+            // 从文本框中读取词库内容
             const content = textareaElement.value;
             // 解析字符，支持空格和换行分隔
             const charArray = content.split(/\s+/).filter(char => char);
             
-            // 更新字库
+            // 更新词库
             placeNameChars[category][libraryName] = charArray;
             
             // 显示保存成功的消息
-            alert('字库更改已保存');
+            alert('词库更改已保存');
         }
         
-        // 新增字库
+        // 新增词库
         function addNewLibrary() {
-            const libraryName = prompt('请输入新字库名称：');
+            const libraryName = prompt('请输入新词库名称：');
             if (!libraryName) return;
             
-            // 让用户选择字库分类
+            // 让用户选择词库分类
             const categories = ['单字', '双字词', '三字词'];
-            const category = prompt(`请选择字库分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
+            const category = prompt(`请选择词库分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
             
             let selectedCategory;
             switch(category) {
@@ -1555,18 +1799,18 @@
                     selectedCategory = '单字'; // 默认分类
             }
             
-            // 检查字库名称是否已存在
+            // 检查词库名称是否已存在
             if (!placeNameChars[selectedCategory][libraryName]) {
                 placeNameChars[selectedCategory][libraryName] = [];
-                // 重新初始化字库选择下拉框
+                // 重新初始化词库选择下拉框
                 initLibrarySelect();
-                alert(`新字库已添加到${selectedCategory}分类`);
+                alert(`新词库已添加到${selectedCategory}分类`);
             } else {
-                alert('字库名称已存在');
+                alert('词库名称已存在');
             }
         }
         
-        // 重命名字库
+        // 重命名词库
         function renameLibrary() {
             const selectElement = document.getElementById('library-select');
             if (!selectElement) return;
@@ -1578,23 +1822,23 @@
             const [category, oldLibraryName] = selectedValue.split('/');
             if (!category || !oldLibraryName) return;
             
-            const newLibraryName = prompt('请输入新字库名称：', oldLibraryName);
+            const newLibraryName = prompt('请输入新词库名称：', oldLibraryName);
             if (!newLibraryName || newLibraryName === oldLibraryName) return;
             
             if (!placeNameChars[category][newLibraryName]) {
-                // 复制旧字库内容到新字库
+                // 复制旧词库内容到新词库
                 placeNameChars[category][newLibraryName] = [...placeNameChars[category][oldLibraryName]];
-                // 删除旧字库
+                // 删除旧词库
                 delete placeNameChars[category][oldLibraryName];
-                // 重新初始化字库选择下拉框
+                // 重新初始化词库选择下拉框
                 initLibrarySelect();
-                alert('字库已重命名');
+                alert('词库已重命名');
             } else {
-                alert('新字库名称已存在');
+                alert('新词库名称已存在');
             }
         }
         
-        // 删除字库
+        // 删除词库
         function deleteLibrary() {
             const selectElement = document.getElementById('library-select');
             if (!selectElement) return;
@@ -1607,20 +1851,20 @@
             if (!category || !libraryName) return;
             
             // 确认删除
-            if (confirm(`确定要删除字库 "${libraryName}" 吗？`)) {
-                // 删除字库
+            if (confirm(`确定要删除词库 "${libraryName}" 吗？`)) {
+                // 删除词库
                 delete placeNameChars[category][libraryName];
-                // 重新初始化字库选择下拉框
+                // 重新初始化词库选择下拉框
                 initLibrarySelect();
-                alert('字库已删除');
+                alert('词库已删除');
             }
         }
         
-        // 导入字库
+        // 导入词库
         function importLibrary() {
             // 让用户选择导入分类
             const categories = ['单字', '双字词', '三字词'];
-            const category = prompt(`请选择导入字库的分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
+            const category = prompt(`请选择导入词库的分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
             
             let selectedCategory;
             switch(category) {
@@ -1655,20 +1899,20 @@
                             const content = e.target.result;
                             const charArray = content.split(/\s+/).filter(char => char);
                             
-                            // 使用文件名作为字库名称（去除扩展名）
+                            // 使用文件名作为词库名称（去除扩展名）
                             const fileName = file.name.replace(/\.txt$/i, '');
                             // 添加到用户选择的分类
                             placeNameChars[selectedCategory][fileName] = charArray;
                             importedCount++;
                             
                             if (importedCount === files.length) {
-                                // 重新初始化字库选择下拉框
+                                // 重新初始化词库选择下拉框
                                 initLibrarySelect();
-                                alert(`成功导入 ${importedCount} 个字库到${selectedCategory}分类`);
+                                alert(`成功导入 ${importedCount} 个词库到${selectedCategory}分类`);
                             }
                         } catch (error) {
-                            console.error('导入字库失败:', error);
-                            alert('导入字库失败，请检查文件格式');
+                            console.error('导入词库失败:', error);
+                            alert('导入词库失败，请检查文件格式');
                         }
                     };
                     reader.readAsText(file, 'utf-8');
@@ -1678,7 +1922,7 @@
             input.click();
         }
         
-        // 导出字库
+        // 导出词库
         function exportLibrary() {
             const selectElement = document.getElementById('library-select');
             if (!selectElement) return;
@@ -1709,7 +1953,7 @@
             }, 100);
         }
         
-        // 更新字库文本框
+        // 更新词库文本框
         function updateLibraryTextarea() {
             const textarea = document.getElementById('library-textarea');
             if (!textarea) return;
