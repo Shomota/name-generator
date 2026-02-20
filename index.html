@@ -69,9 +69,28 @@
                 margin-bottom: 5px;
             }
             
-            .character-input-item input {
+            .character-input-item input:not([type="checkbox"]):not([type="radio"]) {
                 flex: 1;
                 min-width: 150px;
+            }
+            
+            /* 词库选择容器在小屏幕上的样式 */
+            .character-input-item #library-select-0,
+            .character-input-item #library-select-1,
+            .character-input-item #library-select-2,
+            .character-input-item #library-select-3,
+            .character-input-item #library-select-4 {
+                width: 100%;
+            }
+            
+            /* 词库复选框容器在小屏幕上的样式 */
+            .character-input-item #library-select-0 > div,
+            .character-input-item #library-select-1 > div,
+            .character-input-item #library-select-2 > div,
+            .character-input-item #library-select-3 > div,
+            .character-input-item #library-select-4 > div {
+                margin-right: 15px;
+                margin-bottom: 5px;
             }
             
             .library-btn {
@@ -256,11 +275,20 @@
         }
         
         /* 统一表单元素样式 */
-        input, select, textarea {
+        input:not([type="checkbox"]):not([type="radio"]), select, textarea {
             padding: 10px 14px;
             border: 1px solid #ced4da;
             border-radius: 5px;
             font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        /* 复选框和单选框样式 */
+        input[type="checkbox"], input[type="radio"] {
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
             transition: border-color 0.3s ease;
         }
         
@@ -809,15 +837,15 @@
         // 地名用词库 - 层级结构：单字、双字、三字词
         let placeNameChars = {
             '单字': {
-                '形容词': ['大', '小', '高', '低', '长', '短', '宽', '窄', '深', '浅', '新', '旧', '富', '贫', '清', '浊', '明', '暗', '平', '陡', '斜', '峻', '秀', '美', '丽', '奇', '险', '幽', '静', '惠', '优', '荒', '寒', '暖', '湿', '干', '凉'],
-                '方位词': ['东', '南', '西', '北', '中', '前', '后', '左', '右', '上', '下', '内', '外', '里', '外', '顶', '底', '阳', '阴'],
+                '形容': ['大', '小', '高', '低', '长', '短', '宽', '窄', '深', '浅', '新', '旧', '富', '贫', '清', '浊', '明', '暗', '平', '陡', '斜', '峻', '秀', '美', '丽', '奇', '险', '幽', '静', '惠', '优', '荒', '寒', '暖', '湿', '干', '凉'],
+                '方位': ['东', '南', '西', '北', '中', '前', '后', '左', '右', '上', '下', '内', '外', '里', '顶', '底', '阳', '阴'],
                 '水体': ['江', '河', '湖', '海', '洋', '溪', '涧', '泉', '潭', '池', '沱', '汊', '渡', '港', '湾', '洲', '滩', '沟', '渠', '塘', '泊', '源', '渚', '汀', '漕'],
-                '地形地貌': ['山', '岭', '峰', '岗', '坡', '坳', '岩', '崖', '峡', '谷', '坪', '坝', '垅', '垠', '垵', '塬', '墩', '岛', '礁', '洲', '洼', '丘', '壑', '墟', '沟', '盆'],
-                '行政区划或聚落': ['州', '郡', '府', '国', '省', '市', '区', '县', '镇', '乡', '村'],
+                '地形': ['山', '岭', '峰', '岗', '坡', '坳', '岩', '崖', '峡', '谷', '坪', '坝', '垅', '垠', '垵', '塬', '墩', '岛', '礁', '洲', '洼', '丘', '壑', '墟', '沟', '盆'],
+                '区划': ['州', '郡', '府', '国', '省', '市', '区', '县', '镇', '乡', '村'],
                 '动物': ['龙', '虎', '豹', '狮', '象', '鹿', '麒', '麟', '鸾', '凤', '凰', '鹤', '鹰', '雁', '鱼', '鲤', '鲟', '鲲', '鲸', '蛇', '龟', '鳖', '蚌', '蝉', '蚕', '蚁', '蜂'],
                 '植物': ['松', '柏', '榕', '槐', '柳', '桃', '李', '梅', '兰', '竹', '菊', '荷', '莲', '芦', '苇', '葵', '榆', '桑', '棉', '麻', '榴', '樟', '桂', '榕', '枫', '榄'],
-                '矿产或自然物产': ['金', '银', '铜', '铁', '锡', '铅', '煤', '炭', '石', '玉', '珠', '宝', '砂', '砾', '琥', '珊'],
-                '建筑或人工构筑': ['桥', '塔', '楼', '台', '亭', '阁', '关', '城', '堡', '墙', '门', '户', '院', '庙', '观', '寺', '庵', '堂', '宫', '殿', '坞', '堤', '坝', '闸', '渡', '集', '圩', '场', '屯', '堡', '寨', '营', '哨', '墅'],
+                '矿产': ['金', '银', '铜', '铁', '锡', '铅', '煤', '炭', '石', '玉', '珠', '宝', '砂', '砾', '琥', '珊'],
+                '建筑': ['桥', '塔', '楼', '台', '亭', '阁', '关', '城', '堡', '墙', '门', '户', '院', '庙', '观', '寺', '庵', '堂', '宫', '殿', '坞', '堤', '坝', '闸', '渡', '集', '圩', '场', '屯', '堡', '寨', '营', '哨', '墅'],
                 '道路': ['道', '路', '坊', '里', '巷', '街'],
                 '姓氏': ['王', '李', '张', '刘', '陈', '杨', '赵', '黄', '周', '吴', '徐', '孙', '马', '朱', '胡', '郭', '何', '高', '林', '罗', '郑', '梁', '谢', '宋', '唐', '许', '韩', '冯', '邓', '曹', '彭', '曾', '肖', '田', '董', '袁', '潘', '于', '蒋', '蔡', '余', '杜', '叶', '程', '苏', '魏', '吕', '丁', '任', '沈', '姚', '卢', '姜', '崔', '钟', '谭', '陆', '汪', '范', '金', '石', '廖', '贾', '夏', '韦', '付', '方', '白', '邹', '孟', '熊', '秦', '邱', '江', '尹', '薛', '闫', '段', '雷', '侯', '龙', '史', '陶', '黎', '贺', '顾', '毛', '郝', '龚', '邵', '万', '钱', '严', '覃', '武', '戴', '莫', '孔', '向', '汤']
             },
@@ -1063,39 +1091,125 @@
                     const librarySelectItem = document.createElement('div');
                     librarySelectItem.className = 'character-input-item';
                     
+                    // 创建标签容器
+                    const labelContainer = document.createElement('div');
+                    labelContainer.style.display = 'flex';
+                    labelContainer.style.alignItems = 'center';
+                    labelContainer.style.justifyContent = 'space-between';
+                    labelContainer.style.width = '100%';
+                    labelContainer.style.flexWrap = 'wrap';
+                    labelContainer.style.gap = '5px';
+                    
                     // 创建标签
                     const label = document.createElement('label');
                     label.htmlFor = `library-select-${inputCount}`;
                     label.textContent = '词库选择：';
-                    librarySelectItem.appendChild(label);
+                    labelContainer.appendChild(label);
                     
-                    // 创建下拉框
-                    const select = document.createElement('select');
-                    select.id = `library-select-${inputCount}`;
-                    select.style.width = '100%';
-                    // 使用闭包保存当前索引值
-                    select.onchange = (function(index) {
+                    // 创建选择按钮容器
+                    const selectBtnContainer = document.createElement('div');
+                    selectBtnContainer.style.display = 'flex';
+                    selectBtnContainer.style.gap = '5px';
+                    selectBtnContainer.style.flexWrap = 'wrap';
+                    selectBtnContainer.style.justifyContent = 'flex-end';
+                    
+                    // 创建全选按钮
+                    const selectAllBtn = document.createElement('button');
+                    selectAllBtn.className = 'library-btn';
+                    selectAllBtn.textContent = '全选';
+                    selectAllBtn.style.padding = '3px 6px';
+                    selectAllBtn.style.fontSize = '11px';
+                    selectAllBtn.style.whiteSpace = 'nowrap';
+                    selectAllBtn.dataset.state = 'select'; // 状态：select, deselect
+                    selectAllBtn.onclick = (function(index) {
                         return function() {
-                            updateCharacterLibrary(index);
+                            toggleSelectAllLibraries(index);
                         };
                     })(inputCount);
+                    selectBtnContainer.appendChild(selectAllBtn);
+                    
+                    // 创建反选按钮
+                    const invertBtn = document.createElement('button');
+                    invertBtn.className = 'library-btn';
+                    invertBtn.textContent = '反选';
+                    invertBtn.style.padding = '3px 6px';
+                    invertBtn.style.fontSize = '11px';
+                    invertBtn.style.whiteSpace = 'nowrap';
+                    invertBtn.onclick = (function(index) {
+                        return function() {
+                            invertSelectLibraries(index);
+                        };
+                    })(inputCount);
+                    selectBtnContainer.appendChild(invertBtn);
+                    
+                    // 创建清空按钮
+                    const clearLibraryBtn = document.createElement('button');
+                    clearLibraryBtn.className = 'library-btn';
+                    clearLibraryBtn.textContent = '清空';
+                    clearLibraryBtn.style.padding = '3px 6px';
+                    clearLibraryBtn.style.fontSize = '11px';
+                    clearLibraryBtn.style.whiteSpace = 'nowrap';
+                    clearLibraryBtn.onclick = (function(index) {
+                        return function() {
+                            clearLibrarySelection(index);
+                        };
+                    })(inputCount);
+                    selectBtnContainer.appendChild(clearLibraryBtn);
+                    
+                    labelContainer.appendChild(selectBtnContainer);
+                    
+                    librarySelectItem.appendChild(labelContainer);
+                    
+                    // 创建词库选择容器
+                    const libraryContainer = document.createElement('div');
+                    libraryContainer.id = `library-select-${inputCount}`;
+                    libraryContainer.style.display = 'flex';
+                    libraryContainer.style.flexWrap = 'wrap';
+                    libraryContainer.style.gap = '10px';
+                    libraryContainer.style.marginTop = '5px';
+                    libraryContainer.style.alignItems = 'center';
+                    libraryContainer.style.width = '100%';
                     
                     // 动态生成选项，基于选择的词库类型
                     const currentType = settings.type || '单字';
                     const libraryNames = Object.keys(placeNameChars[currentType]);
                     console.log('可用词库:', libraryNames);
                     
+                    // 确保 settings.libraries 数组存在
+                    if (!settings.libraries) {
+                        settings.libraries = settings.library ? [settings.library] : [];
+                    }
+                    
                     libraryNames.forEach(libraryName => {
-                        const option = document.createElement('option');
-                        option.value = libraryName;
-                        option.textContent = libraryName;
-                        if (libraryName === settings.library) {
-                            option.selected = true;
-                        }
-                        select.appendChild(option);
+                        const checkboxContainer = document.createElement('div');
+                        checkboxContainer.style.display = 'flex';
+                        checkboxContainer.style.alignItems = 'center';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `library-checkbox-${inputCount}-${libraryName}`;
+                        checkbox.value = libraryName;
+                        checkbox.checked = Array.isArray(settings.libraries) && settings.libraries.includes(libraryName);
+                        checkbox.style.transform = 'scale(1.2)';
+                        checkbox.style.marginRight = '8px';
+                        checkbox.onchange = (function(index) {
+                            return function() {
+                                updateCharacterLibraries(index);
+                            };
+                        })(inputCount);
+                        
+                        const checkboxLabel = document.createElement('label');
+                        checkboxLabel.htmlFor = `library-checkbox-${inputCount}-${libraryName}`;
+                        checkboxLabel.textContent = libraryName;
+                        checkboxLabel.style.marginLeft = '4px';
+                        checkboxLabel.style.fontSize = '14px';
+                        
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(checkboxLabel);
+                        libraryContainer.appendChild(checkboxContainer);
                     });
                     
-                    librarySelectItem.appendChild(select);
+                    librarySelectItem.appendChild(libraryContainer);
                     characterInputGroup.appendChild(librarySelectItem);
                     
                     // 创建自定义字符输入
@@ -1288,22 +1402,45 @@
                 characterSettings[index].type = newType;
                 console.log(`第${index + 1}部分的词库类型已更新为: ${newType}`);
                 
-                // 更新词库选择下拉框
+                // 更新词库选择容器
                 if (librarySelect) {
                     // 清空现有选项
                     librarySelect.innerHTML = '';
                     
-                    // 添加新类型的词库选项
+                    // 添加新类型的词库选项（复选框形式）
                     const libraryNames = Object.keys(placeNameChars[newType]);
                     libraryNames.forEach(libraryName => {
-                        const option = document.createElement('option');
-                        option.value = libraryName;
-                        option.textContent = libraryName;
-                        librarySelect.appendChild(option);
+                        const checkboxContainer = document.createElement('div');
+                        checkboxContainer.style.display = 'flex';
+                        checkboxContainer.style.alignItems = 'center';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `library-checkbox-${index}-${libraryName}`;
+                        checkbox.value = libraryName;
+                        checkbox.checked = false; // 默认不选中
+                        checkbox.style.transform = 'scale(1.2)';
+                        checkbox.style.marginRight = '8px';
+                        checkbox.onchange = (function(index) {
+                            return function() {
+                                updateCharacterLibraries(index);
+                            };
+                        })(index);
+                        
+                        const checkboxLabel = document.createElement('label');
+                        checkboxLabel.htmlFor = `library-checkbox-${index}-${libraryName}`;
+                        checkboxLabel.textContent = libraryName;
+                        checkboxLabel.style.marginLeft = '4px';
+                        checkboxLabel.style.fontSize = '14px';
+                        
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(checkboxLabel);
+                        librarySelect.appendChild(checkboxContainer);
                     });
                     
                     // 更新词库设置
                     characterSettings[index].library = libraryNames[0] || '';
+                    characterSettings[index].libraries = [libraryNames[0]] || [];
                 }
                 
                 // 更新自定义字符输入框的最大长度
@@ -1326,12 +1463,85 @@
             }
         }
         
-        // 更新字符词库
-        function updateCharacterLibrary(index) {
-            const librarySelect = document.getElementById(`library-select-${index}`);
-            if (librarySelect) {
-                characterSettings[index].library = librarySelect.value;
-                console.log(`第${index + 1}部分的词库已更新为: ${librarySelect.value}`);
+
+        
+        // 更新多个字符词库
+        function updateCharacterLibraries(index) {
+            const libraryContainer = document.getElementById(`library-select-${index}`);
+            if (libraryContainer) {
+                const checkboxes = libraryContainer.querySelectorAll('input[type="checkbox"]');
+                const selectedLibraries = Array.from(checkboxes)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.value);
+                
+                characterSettings[index].libraries = selectedLibraries;
+                // 同时更新单个词库设置，保持兼容性
+                characterSettings[index].library = selectedLibraries[0] || '';
+                console.log(`第${index + 1}部分的词库已更新为: ${selectedLibraries.join(', ')}`);
+            }
+        }
+        
+        // 全选/取消全选词库
+        function toggleSelectAllLibraries(index) {
+            const libraryContainer = document.getElementById(`library-select-${index}`);
+            const selectAllBtn = libraryContainer.previousElementSibling.querySelector('.library-btn:first-child');
+            if (libraryContainer && selectAllBtn) {
+                const checkboxes = libraryContainer.querySelectorAll('input[type="checkbox"]');
+                const currentState = selectAllBtn.dataset.state || 'select';
+                
+                switch(currentState) {
+                    case 'select':
+                        // 全选
+                        checkboxes.forEach(checkbox => {
+                            checkbox.checked = true;
+                        });
+                        selectAllBtn.textContent = '取消全选';
+                        selectAllBtn.dataset.state = 'deselect';
+                        break;
+                    case 'deselect':
+                        // 取消全选
+                        checkboxes.forEach(checkbox => {
+                            checkbox.checked = false;
+                        });
+                        selectAllBtn.textContent = '全选';
+                        selectAllBtn.dataset.state = 'select';
+                        break;
+                }
+                
+                // 更新词库设置
+                updateCharacterLibraries(index);
+            }
+        }
+        
+        // 反选词库
+        function invertSelectLibraries(index) {
+            const libraryContainer = document.getElementById(`library-select-${index}`);
+            if (libraryContainer) {
+                const checkboxes = libraryContainer.querySelectorAll('input[type="checkbox"]');
+                
+                // 反选所有复选框
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = !checkbox.checked;
+                });
+                
+                // 更新词库设置
+                updateCharacterLibraries(index);
+            }
+        }
+        
+        // 清空词库选择
+        function clearLibrarySelection(index) {
+            const libraryContainer = document.getElementById(`library-select-${index}`);
+            if (libraryContainer) {
+                const checkboxes = libraryContainer.querySelectorAll('input[type="checkbox"]');
+                
+                // 清空所有复选框
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // 更新词库设置
+                updateCharacterLibraries(index);
             }
         }
         
@@ -1344,19 +1554,19 @@
                     return;
                 }
                 
-                let libraryName = settings.library || '';
+                let libraryNames = settings.libraries || [];
                 const type = settings.type || '单字';
                 
                 // 如果词库未设置，选择该分类下的第一个可用词库
-                if (!libraryName) {
-                    const libraryNames = Object.keys(placeNameChars[type]);
-                    if (libraryNames.length > 0) {
-                        libraryName = libraryNames[0];
+                if (libraryNames.length === 0) {
+                    const allLibraries = Object.keys(placeNameChars[type]);
+                    if (allLibraries.length > 0) {
+                        libraryNames = [allLibraries[0]];
                     } else {
                         // 如果没有可用词库，使用单字分类下的第一个词库
                         const singleCharLibraries = Object.keys(placeNameChars['单字']);
                         if (singleCharLibraries.length > 0) {
-                            libraryName = singleCharLibraries[0];
+                            libraryNames = [singleCharLibraries[0]];
                         } else {
                             alert('没有可用的词库');
                             return;
@@ -1364,9 +1574,15 @@
                     }
                 }
                 
-                const charArray = placeNameChars[type][libraryName] || [];
-                if (charArray.length === 0) {
-                    alert(`词库 "${libraryName}" 为空，请先添加字符`);
+                // 收集所有选中词库的字符
+                let allChars = [];
+                libraryNames.forEach(libraryName => {
+                    const charArray = placeNameChars[type][libraryName] || [];
+                    allChars = allChars.concat(charArray);
+                });
+                
+                if (allChars.length === 0) {
+                    alert('所选词库为空，请先添加字符');
                     return;
                 }
                 
@@ -1381,7 +1597,7 @@
                 
                 // 生成字符选择界面
                 let charItemsHTML = '';
-                charArray.forEach(char => {
+                allChars.forEach(char => {
                     charItemsHTML += `<div class="char-item" onclick="selectChar('${char}', ${index})"><center>${char}</center></div>`;
                 });
                 
@@ -1539,34 +1755,45 @@
                         char = settings.customChar;
                     } else {
                         // 从词库中随机选择字符
-                        let libraryName = settings.library || '';
+                        let libraryNames = settings.libraries || [];
                         const type = settings.type || '单字';
                         
-                        // 如果词库未设置，选择该分类下的第一个可用词库
-                        if (!libraryName) {
-                            const libraryNames = Object.keys(placeNameChars[type]);
-                            if (libraryNames.length > 0) {
-                                libraryName = libraryNames[0];
-                            } else {
-                                // 如果没有可用词库，使用单字分类下的第一个词库
-                                const singleCharLibraries = Object.keys(placeNameChars['单字']);
-                                if (singleCharLibraries.length > 0) {
-                                    libraryName = singleCharLibraries[0];
+                        // 如果没有选择词库，使用单个词库设置或默认词库
+                        if (libraryNames.length === 0) {
+                            let libraryName = settings.library || '';
+                            if (!libraryName) {
+                                // 选择该分类下的第一个可用词库
+                                const allLibraries = Object.keys(placeNameChars[type]);
+                                if (allLibraries.length > 0) {
+                                    libraryName = allLibraries[0];
                                 } else {
-                                    console.error('没有可用的词库');
-                                    resultElement.textContent = '错误：没有可用的词库';
-                                    return;
+                                    // 如果没有可用词库，使用单字分类下的第一个词库
+                                    const singleCharLibraries = Object.keys(placeNameChars['单字']);
+                                    if (singleCharLibraries.length > 0) {
+                                        libraryName = singleCharLibraries[0];
+                                    } else {
+                                        console.error('没有可用的词库');
+                                        resultElement.textContent = '错误：没有可用的词库';
+                                        return;
+                                    }
                                 }
                             }
+                            libraryNames = [libraryName];
                         }
-                        const charArray = placeNameChars[type][libraryName] || [];
                         
-                        if (charArray.length === 0) {
-                            resultElement.textContent = `词库 "${libraryName}" 为空，请先添加字符`;
+                        // 收集所有选中词库的字符
+                        let allChars = [];
+                        libraryNames.forEach(libraryName => {
+                            const charArray = placeNameChars[type][libraryName] || [];
+                            allChars = allChars.concat(charArray);
+                        });
+                        
+                        if (allChars.length === 0) {
+                            resultElement.textContent = '所选词库为空，请先添加字符';
                             return;
                         }
                         
-                        char = getRandomElement(charArray);
+                        char = getRandomElement(allChars);
                     }
                     
                     placeName += char;
@@ -1643,34 +1870,45 @@
                             char = settings.customChar;
                         } else {
                             // 从词库中随机选择字符
-                            let libraryName = settings.library || '';
+                            let libraryNames = settings.libraries || [];
                             const type = settings.type || '单字';
                             
-                            // 如果词库未设置，选择该分类下的第一个可用词库
-                            if (!libraryName) {
-                                const libraryNames = Object.keys(placeNameChars[type]);
-                                if (libraryNames.length > 0) {
-                                    libraryName = libraryNames[0];
-                                } else {
-                                    // 如果没有可用词库，使用单字分类下的第一个词库
-                                    const singleCharLibraries = Object.keys(placeNameChars['单字']);
-                                    if (singleCharLibraries.length > 0) {
-                                        libraryName = singleCharLibraries[0];
+                            // 如果没有选择词库，使用单个词库设置或默认词库
+                            if (libraryNames.length === 0) {
+                                let libraryName = settings.library || '';
+                                if (!libraryName) {
+                                    // 选择该分类下的第一个可用词库
+                                    const allLibraries = Object.keys(placeNameChars[type]);
+                                    if (allLibraries.length > 0) {
+                                        libraryName = allLibraries[0];
                                     } else {
-                                        console.error('没有可用的词库');
-                                        resultElement.textContent = '错误：没有可用的词库';
-                                        return;
+                                        // 如果没有可用词库，使用单字分类下的第一个词库
+                                        const singleCharLibraries = Object.keys(placeNameChars['单字']);
+                                        if (singleCharLibraries.length > 0) {
+                                            libraryName = singleCharLibraries[0];
+                                        } else {
+                                            console.error('没有可用的词库');
+                                            resultElement.textContent = '错误：没有可用的词库';
+                                            return;
+                                        }
                                     }
                                 }
+                                libraryNames = [libraryName];
                             }
-                            const charArray = placeNameChars[type][libraryName] || [];
                             
-                            if (charArray.length === 0) {
-                                resultElement.textContent = `词库 "${libraryName}" 为空，请先添加字符`;
+                            // 收集所有选中词库的字符
+                            let allChars = [];
+                            libraryNames.forEach(libraryName => {
+                                const charArray = placeNameChars[type][libraryName] || [];
+                                allChars = allChars.concat(charArray);
+                            });
+                            
+                            if (allChars.length === 0) {
+                                resultElement.textContent = '所选词库为空，请先添加字符';
                                 return;
                             }
                             
-                            char = getRandomElement(charArray);
+                            char = getRandomElement(allChars);
                         }
                         
                         placeName += char;
@@ -1857,6 +2095,9 @@
             // 更新词库
             placeNameChars[category][libraryName] = charArray;
             
+            // 更新字符输入框，确保复选框状态正确
+            updateCharacterInputs();
+            
             // 显示保存成功的消息
             alert('词库更改已保存');
         }
@@ -1867,7 +2108,7 @@
             if (!libraryName) return;
             
             // 让用户选择词库分类
-            const categories = ['单字', '双字词', '三字词'];
+            const categories = ['单字', '双字词', '三字词', '四字词'];
             const category = prompt(`请选择词库分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
             
             let selectedCategory;
@@ -1881,6 +2122,9 @@
                 case '3':
                     selectedCategory = '三字词';
                     break;
+                case '4':
+                    selectedCategory = '四字词';
+                    break;
                 default:
                     selectedCategory = '单字'; // 默认分类
             }
@@ -1890,6 +2134,8 @@
                 placeNameChars[selectedCategory][libraryName] = [];
                 // 重新初始化词库选择下拉框
                 initLibrarySelect();
+                // 更新字符输入框，确保复选框状态正确
+                updateCharacterInputs();
                 alert(`新词库已添加到${selectedCategory}分类`);
             } else {
                 alert('词库名称已存在');
@@ -1918,6 +2164,8 @@
                 delete placeNameChars[category][oldLibraryName];
                 // 重新初始化词库选择下拉框
                 initLibrarySelect();
+                // 更新字符输入框，确保复选框状态正确
+                updateCharacterInputs();
                 alert('词库已重命名');
             } else {
                 alert('新词库名称已存在');
@@ -1942,6 +2190,8 @@
                 delete placeNameChars[category][libraryName];
                 // 重新初始化词库选择下拉框
                 initLibrarySelect();
+                // 更新字符输入框，确保复选框状态正确
+                updateCharacterInputs();
                 alert('词库已删除');
             }
         }
@@ -1949,7 +2199,7 @@
         // 导入词库
         function importLibrary() {
             // 让用户选择导入分类
-            const categories = ['单字', '双字词', '三字词'];
+            const categories = ['单字', '双字词', '三字词', '四字词'];
             const category = prompt(`请选择导入词库的分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
             
             let selectedCategory;
@@ -1962,6 +2212,9 @@
                     break;
                 case '3':
                     selectedCategory = '三字词';
+                    break;
+                case '4':
+                    selectedCategory = '四字词';
                     break;
                 default:
                     selectedCategory = '单字'; // 默认分类
@@ -1994,6 +2247,8 @@
                             if (importedCount === files.length) {
                                 // 重新初始化词库选择下拉框
                                 initLibrarySelect();
+                                // 更新字符输入框，确保复选框状态正确
+                                updateCharacterInputs();
                                 alert(`成功导入 ${importedCount} 个词库到${selectedCategory}分类`);
                             }
                         } catch (error) {
