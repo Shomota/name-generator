@@ -79,20 +79,6 @@
             font-weight: bold;
         }
         
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
         .status {
             text-align: center;
             margin-top: 20px;
@@ -129,19 +115,129 @@
             cursor: not-allowed;
         }
         
-        .action-btn {
+        /* 统一按钮样式 */
+        .btn {
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 主按钮 */
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        /* 成功按钮 */
+        .btn-success {
             background-color: #27ae60;
             color: white;
-            border: none;
-            padding: 8px 16px;
+        }
+        
+        .btn-success:hover {
+            background-color: #229954;
+        }
+        
+        /* 危险按钮 */
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        /* 警告按钮 */
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        /* 信息按钮 */
+        .btn-info {
+            background-color: #1abc9c;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #16a085;
+        }
+        
+        /* 次要按钮 */
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        /* 统一表单元素样式 */
+        input, select, textarea {
+            padding: 10px 14px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
             font-size: 14px;
-            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.25);
+        }
+        
+        /* 下拉框和滑动条的焦点样式 */
+        select:focus, input[type="range"]:focus {
+            outline: none;
+            border-color: #ced4da;
+            box-shadow: none;
+        }
+        
+        /* 操作按钮组 */
+        .action-btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            border: none;
+            padding: 10px 16px;
+            font-size: 14px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .action-btn:hover {
             opacity: 0.9;
+            transform: translateY(-1px);
         }
         
         .action-btn:nth-child(1) {
@@ -213,6 +309,14 @@
             border-radius: 15px;
             font-size: 14px;
             color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .history-item:hover {
+            background-color: #dee2e6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .settings-container {
@@ -244,25 +348,22 @@
         }
         
         .setting-item select {
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 16px;
             flex: 1;
             min-width: 150px;
         }
         
         .setting-item button {
-            padding: 8px 16px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .setting-item button:hover {
             opacity: 0.9;
+            transform: translateY(-1px);
         }
         
         .character-settings-container {
@@ -306,18 +407,10 @@
         
         .character-input-item input {
             flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 16px;
         }
         
         .character-input-item select {
             flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 16px;
         }
         
         .character-input-item .lock-container {
@@ -333,18 +426,19 @@
         
         .character-input-item .library-btn {
             margin-left: 10px;
-            padding: 6px 12px;
+            padding: 8px 14px;
             background-color: #27ae60;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .character-input-item .library-btn:hover {
             background-color: #229954;
+            transform: translateY(-1px);
         }
         
         .lock-status {
@@ -595,7 +689,7 @@
 <body>
     <div class="container">
         <h1>地名生成器</h1>
-        <p>从网络获取常用中文地名用字库，随机组合生成全新的地名</p>
+        <p>使用本地中文地名用字库，随机组合生成全新的地名</p>
         
         <!-- 字符设置区域 -->
         <div class="character-settings-container">
@@ -706,74 +800,9 @@
             }
         }
         
-        // 随机生成地名
-        function generatePlaceName() {
-            const resultElement = document.getElementById('result');
-            resultElement.textContent = '生成中...';
-            
-            // 随机决定地名长度（2-4字）
-            const length = Math.floor(Math.random() * 3) + 2;
-            
-            let placeName = '';
-            
-            // 获取当前字库的字符数组
-            const charArray = placeNameChars['单字']['默认'] || [];
-            
-            if (charArray.length === 0) {
-                resultElement.textContent = '字库为空，请先添加字符';
-                return;
-            }
-            
-            // 从统一字库中随机选择字符
-            for (let i = 0; i < length; i++) {
-                placeName += getRandomElement(charArray);
-            }
-            
-            // 显示结果
-            setTimeout(() => {
-                resultElement.textContent = placeName;
-            }, 500);
-        }
-        
         // 辅助函数：从数组中随机获取元素
         function getRandomElement(array) {
             return array[Math.floor(Math.random() * array.length)];
-        }
-        
-        // 生成多个地名
-        function generateMultiplePlaceNames() {
-            const resultElement = document.getElementById('result');
-            resultElement.textContent = '生成中...';
-            
-            // 获取当前字库的字符数组
-            const charArray = placeNameChars['单字']['默认'] || [];
-            
-            if (charArray.length === 0) {
-                resultElement.textContent = '字库为空，请先添加字符';
-                return;
-            }
-            
-            // 生成指定数量的地名
-            const placeNames = [];
-            for (let i = 0; i < generateCount; i++) {
-                // 随机决定地名长度（2-4字）
-                const length = Math.floor(Math.random() * 3) + 2;
-                let placeName = '';
-                
-                // 从统一字库中随机选择字符
-                for (let j = 0; j < length; j++) {
-                    placeName += getRandomElement(charArray);
-                }
-                
-                placeNames.push(placeName);
-            }
-            
-            // 显示结果
-            setTimeout(() => {
-                resultElement.textContent = placeNames.join('\n');
-                // 添加到历史记录
-                placeNames.forEach(name => addToHistory(name));
-            }, 500);
         }
         
         // 复制结果到剪贴板
@@ -1364,6 +1393,11 @@
                 historyItem.className = 'history-item';
                 historyItem.textContent = name;
                 historyItem.onclick = function() {
+                    // 点击时的样式变化
+                    historyItem.style.backgroundColor = '#3498db';
+                    historyItem.style.color = 'white';
+                    historyItem.style.transform = 'scale(1.05)';
+                    
                     // 点击复制到剪贴板
                     navigator.clipboard.writeText(name)
                         .then(() => {
@@ -1372,10 +1406,18 @@
                             historyItem.textContent = '已复制！';
                             setTimeout(() => {
                                 historyItem.textContent = originalText;
+                                // 恢复原始样式
+                                historyItem.style.backgroundColor = '';
+                                historyItem.style.color = '';
+                                historyItem.style.transform = '';
                             }, 1000);
                         })
                         .catch(err => {
                             console.error('复制失败:', err);
+                            // 恢复原始样式
+                            historyItem.style.backgroundColor = '';
+                            historyItem.style.color = '';
+                            historyItem.style.transform = '';
                         });
                 };
                 historyElement.appendChild(historyItem);
@@ -1487,12 +1529,31 @@
             const libraryName = prompt('请输入新字库名称：');
             if (!libraryName) return;
             
-            // 默认添加到单字分类
-            if (!placeNameChars['单字'][libraryName]) {
-                placeNameChars['单字'][libraryName] = [];
+            // 让用户选择字库分类
+            const categories = ['单字', '双字词', '三字词'];
+            const category = prompt(`请选择字库分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
+            
+            let selectedCategory;
+            switch(category) {
+                case '1':
+                    selectedCategory = '单字';
+                    break;
+                case '2':
+                    selectedCategory = '双字词';
+                    break;
+                case '3':
+                    selectedCategory = '三字词';
+                    break;
+                default:
+                    selectedCategory = '单字'; // 默认分类
+            }
+            
+            // 检查字库名称是否已存在
+            if (!placeNameChars[selectedCategory][libraryName]) {
+                placeNameChars[selectedCategory][libraryName] = [];
                 // 重新初始化字库选择下拉框
                 initLibrarySelect();
-                alert('新字库已添加');
+                alert(`新字库已添加到${selectedCategory}分类`);
             } else {
                 alert('字库名称已存在');
             }
@@ -1550,6 +1611,25 @@
         
         // 导入字库
         function importLibrary() {
+            // 让用户选择导入分类
+            const categories = ['单字', '双字词', '三字词'];
+            const category = prompt(`请选择导入字库的分类：\n${categories.map((c, i) => `${i + 1}. ${c}`).join('\n')}\n\n请输入数字选择分类：`, '1');
+            
+            let selectedCategory;
+            switch(category) {
+                case '1':
+                    selectedCategory = '单字';
+                    break;
+                case '2':
+                    selectedCategory = '双字词';
+                    break;
+                case '3':
+                    selectedCategory = '三字词';
+                    break;
+                default:
+                    selectedCategory = '单字'; // 默认分类
+            }
+            
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.txt';
@@ -1570,14 +1650,14 @@
                             
                             // 使用文件名作为字库名称（去除扩展名）
                             const fileName = file.name.replace(/\.txt$/i, '');
-                            // 默认添加到单字分类
-                            placeNameChars['单字'][fileName] = charArray;
+                            // 添加到用户选择的分类
+                            placeNameChars[selectedCategory][fileName] = charArray;
                             importedCount++;
                             
                             if (importedCount === files.length) {
                                 // 重新初始化字库选择下拉框
                                 initLibrarySelect();
-                                alert(`成功导入 ${importedCount} 个字库`);
+                                alert(`成功导入 ${importedCount} 个字库到${selectedCategory}分类`);
                             }
                         } catch (error) {
                             console.error('导入字库失败:', error);
