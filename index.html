@@ -724,33 +724,12 @@
     
     <script>
         // 地名用词库 - 层级结构：单字、双字、三字词
+        // 初始为空，需要通过导入 all_libraries.txt 文件来恢复
         let placeNameChars = {
-            '单字': {
-                '形容': ['大', '小', '高', '低', '长', '短', '宽', '窄', '深', '浅', '新', '旧', '富', '贫', '清', '浊', '明', '暗', '平', '陡', '斜', '峻', '秀', '美', '丽', '奇', '险', '幽', '静', '惠', '优', '荒', '寒', '暖', '湿', '干', '凉'],
-                '方位': ['东', '南', '西', '北', '中', '前', '后', '左', '右', '上', '下', '内', '外', '里', '顶', '底', '阳', '阴'],
-                '水体': ['江', '河', '湖', '海', '洋', '溪', '涧', '泉', '潭', '池', '沱', '汊', '渡', '港', '湾', '洲', '滩', '沟', '渠', '塘', '泊', '源', '渚', '汀', '漕'],
-                '地形': ['山', '岭', '峰', '岗', '坡', '坳', '岩', '崖', '峡', '谷', '坪', '坝', '垅', '垠', '垵', '塬', '墩', '岛', '礁', '洲', '洼', '丘', '壑', '墟', '沟', '盆'],
-                '区划': ['州', '郡', '府', '国', '省', '市', '区', '县', '镇', '乡', '村'],
-                '动物': ['龙', '虎', '豹', '狮', '象', '鹿', '麒', '麟', '鸾', '凤', '凰', '鹤', '鹰', '雁', '鱼', '鲤', '鲟', '鲲', '鲸', '蛇', '龟', '鳖', '蚌', '蝉', '蚕', '蚁', '蜂'],
-                '植物': ['松', '柏', '榕', '槐', '柳', '桃', '李', '梅', '兰', '竹', '菊', '荷', '莲', '芦', '苇', '葵', '榆', '桑', '棉', '麻', '榴', '樟', '桂', '榕', '枫', '榄'],
-                '矿产': ['金', '银', '铜', '铁', '锡', '铅', '煤', '炭', '石', '玉', '珠', '宝', '砂', '砾', '琥', '珊'],
-                '建筑': ['桥', '塔', '楼', '台', '亭', '阁', '关', '城', '堡', '墙', '门', '户', '院', '庙', '观', '寺', '庵', '堂', '宫', '殿', '坞', '堤', '坝', '闸', '渡', '集', '圩', '场', '屯', '堡', '寨', '营', '哨', '墅'],
-                '道路': ['道', '路', '坊', '里', '巷', '街'],
-                '姓氏': ['王', '李', '张', '刘', '陈', '杨', '赵', '黄', '周', '吴', '徐', '孙', '马', '朱', '胡', '郭', '何', '高', '林', '罗', '郑', '梁', '谢', '宋', '唐', '许', '韩', '冯', '邓', '曹', '彭', '曾', '肖', '田', '董', '袁', '潘', '于', '蒋', '蔡', '余', '杜', '叶', '程', '苏', '魏', '吕', '丁', '任', '沈', '姚', '卢', '姜', '崔', '钟', '谭', '陆', '汪', '范', '金', '石', '廖', '贾', '夏', '韦', '付', '方', '白', '邹', '孟', '熊', '秦', '邱', '江', '尹', '薛', '闫', '段', '雷', '侯', '龙', '史', '陶', '黎', '贺', '顾', '毛', '郝', '龚', '邵', '万', '钱', '严', '覃', '武', '戴', '莫', '孔', '向', '汤']
-            },
-            '双字词': {
-                '方位': ['东方', '西方', '南方', '北方', '中央', '中原', '中华', '神州', '大地', '山河', '江河', '湖海', '山水', '江海', '湖泊', '河流', '山川'],
-                '地理': ['平原', '高原', '盆地', '丘陵', '山地', '森林', '草原', '沙漠', '戈壁', '岛屿', '半岛', '海峡', '海湾', '港口', '码头', '桥梁', '隧道', '公路', '铁路', '机场', '车站', '城市', '乡镇', '村庄', '社区', '街道', '广场', '公园', '花园', '园林'],
-                '建筑': ['建筑', '房屋', '大厦', '高楼', '别墅', '公寓', '酒店', '饭店', '商场', '超市', '市场', '商店', '店铺', '银行', '医院', '学校', '大学', '中学', '小学', '幼儿园', '图书馆', '博物馆', '展览馆', '体育馆', '运动场', '剧场', '影院', '音乐厅', '美术馆', '画廊', '寺庙', '教堂', '道观', '庵堂', '宫殿', '城堡', '要塞', '关口', '城门', '城墙', '城楼', '钟楼', '鼓楼', '塔寺', '亭台', '楼阁', '轩榭', '厅堂', '馆院']
-            },
-            '三字词': {
-                '地理': ['东方红', '太阳升', '新中国', '新时代', '新社会', '新国家', '新民族', '新人民', '新青年', '新少年', '新儿童', '新学生', '新老师', '新医生', '新护士', '新工人', '新农民', '新军人', '新警察', '新法官', '新律师', '新记者', '新编辑', '新作家', '新画家', '新音乐家', '新舞蹈家', '新演员', '新导演', '新摄影师', '新设计师', '新建筑师', '新工程师', '新科学家', '新发明家', '新企业家', '新商人', '新公务员', '新职员', '新员工', '新同事', '新朋友', '新邻居', '新同学', '新伙伴', '新成员', '新队员', '新团员', '新党员', '新市民', '新村民', '新居民', '新住户', '新租户', '新房东', '新租客', '新客户', '新顾客', '新用户', '新会员', '新粉丝', '新观众', '新听众', '新读者'],
-                '建筑': ['黄鹤楼', '岳阳楼', '滕王阁', '鹳雀楼', '蓬莱阁', '大观楼', '光岳楼', '钟鼓楼', '天安门', '午门', '神武门', '东华门', '西华门', '太和殿', '中和殿', '保和殿', '乾清宫', '交泰殿', '坤宁宫', '御花园', '颐和园', '圆明园', '避暑山庄', '故宫', '长城', '天坛', '地坛', '日坛', '月坛', '社稷坛', '先农坛', '太庙', '孔庙', '国子监', '雍和宫', '白云观', '潭柘寺', '戒台寺', '红螺寺', '灵光寺', '法源寺', '广济寺', '报国寺', '卧佛寺', '碧云寺', '香山寺', '大觉寺']
-            },
-            '四字词': {
-                '地理': ['东方明珠', '西方极乐', '南方福地', '北方重镇', '中央枢纽', '中原大地', '中华神州', '神州大地', '锦绣山河', '壮丽山河', '大好河山', '山清水秀', '山高水长', '山明水秀', '山光水色', '山穷水尽', '山重水复', '山高水低', '山长水远', '山温水软', '山环水抱', '山崩水竭', '山寒水冷', '山遥水远', '山肤水豢', '山眉水眼', '山高水阔', '山高水险', '山高水远', '山高水长', '山高水深'],
-                '建筑': ['紫禁城', '颐和园', '圆明园', '避暑山庄', '天安门广场', '人民大会堂', '故宫博物院', '国家博物馆', '军事博物馆', '历史博物馆', '自然博物馆', '科技博物馆', '艺术博物馆', '地质博物馆', '航空博物馆', '航海博物馆', '铁路博物馆', '汽车博物馆', '农业博物馆', '工业博物馆', '民族博物馆', '革命博物馆', '军事博物馆', '历史博物馆', '自然博物馆', '科技博物馆', '艺术博物馆', '地质博物馆', '航空博物馆', '航海博物馆']
-            }
+            '单字': {},
+            '双字词': {},
+            '三字词': {},
+            '四字词': {}
         };
         
         // 初始化地名用词库
@@ -2228,6 +2207,68 @@
         
         // 导入词库
         function importLibrary() {
+            // 直接打开文件选择，不先显示分类选择
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.txt';
+            input.multiple = true;
+            
+            input.onchange = function(e) {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                let importedCount = 0;
+                let mergedImportCount = 0;
+                
+                for (let file of files) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const content = e.target.result;
+                            
+                            // 检查是否为合并词库文件
+                            if (content.includes('[')) {
+                                // 处理合并词库文件
+                                const libraries = parseMergedLibraryFile(content);
+                                libraries.forEach(library => {
+                                    const { category, name, chars } = library;
+                                    // 确保分类存在
+                                    if (!placeNameChars[category]) {
+                                        placeNameChars[category] = {};
+                                    }
+                                    placeNameChars[category][name] = chars;
+                                    mergedImportCount++;
+                                });
+                            } else {
+                                // 处理单个词库文件，需要选择分类
+                                showCategorySelectionForSingleLibrary(file, content);
+                            }
+                            
+                            // 检查是否所有文件都处理完成（仅针对合并文件）
+                            if (content.includes('[')) {
+                                importedCount++;
+                                if (importedCount === files.length) {
+                                    // 重新初始化词库选择下拉框
+                                    initLibrarySelect();
+                                    // 更新字符输入框，确保复选框状态正确
+                                    updateCharacterInputs();
+                                    alert(`成功导入 ${mergedImportCount} 个词库`);
+                                }
+                            }
+                        } catch (error) {
+                            console.error('导入词库失败:', error);
+                            alert('导入词库失败，请检查文件格式');
+                        }
+                    };
+                    reader.readAsText(file, 'utf-8');
+                }
+            };
+            
+            input.click();
+        }
+        
+        // 为单个词库文件显示分类选择
+        function showCategorySelectionForSingleLibrary(file, content) {
             // 创建选择分类弹窗
             let modal = document.getElementById('import-category-modal');
             if (!modal) {
@@ -2244,7 +2285,7 @@
                 categoriesHTML += `
                     <div style="display: flex; align-items: center; margin-bottom: 10px;">
                         <input type="radio" name="import-category" value="${category}" style="transform: scale(1.2); margin-right: 10px;">
-                        <label for="import-${category}" style="font-size: 14px; cursor: pointer;">${category}</label>
+                        <label for="import-${category}" style="font-size: 14px; cursor: pointer; color: var(--text-color); transition: color 0.3s ease;">${category}</label>
                     </div>
                 `;
             });
@@ -2256,20 +2297,59 @@
                         <button class="btn btn-secondary" onclick="closeImportModal()" style="font-size: 24px; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
                     </div>
                     <div class="library-content" style="max-height: 300px; overflow-y: auto;">
-                        <p style="margin-bottom: 15px; font-size: 14px;">请选择要导入词库的分类：</p>
-                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e9ecef;">
+                        <p style="margin-bottom: 15px; font-size: 14px; color: var(--text-color); transition: color 0.3s ease;">请选择要导入词库的分类：</p>
+                        <div style="background-color: var(--card-bg); padding: 15px; border-radius: 5px; border: 1px solid var(--border-color); transition: background-color 0.3s ease, border-color 0.3s ease;">
                             ${categoriesHTML}
                         </div>
                     </div>
                     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
                         <button class="btn btn-secondary" onclick="closeImportModal()">取消</button>
-                        <button class="btn btn-primary" onclick="confirmImportCategory()">确认选择</button>
+                        <button class="btn btn-primary" onclick="confirmImportSingleLibrary('${file.name}', '${content.replace(/'/g, "\\'")}')">确认选择</button>
                     </div>
                 </div>
             `;
             
             // 显示弹窗
             modal.style.display = 'block';
+        }
+        
+        // 确认导入单个词库
+        function confirmImportSingleLibrary(fileName, content) {
+            const modal = document.getElementById('import-category-modal');
+            if (!modal) return;
+            
+            // 获取选中的分类
+            const selectedRadio = modal.querySelector('input[name="import-category"]:checked');
+            if (!selectedRadio) {
+                alert('请选择一个分类');
+                return;
+            }
+            
+            const selectedCategory = selectedRadio.value;
+            
+            // 关闭分类选择弹窗
+            modal.style.display = 'none';
+            
+            try {
+                const charArray = content.split(/\s+/).filter(char => char);
+                // 使用文件名作为词库名称（去除扩展名）
+                const libraryName = fileName.replace(/\.txt$/i, '');
+                // 确保分类存在
+                if (!placeNameChars[selectedCategory]) {
+                    placeNameChars[selectedCategory] = {};
+                }
+                // 添加到用户选择的分类
+                placeNameChars[selectedCategory][libraryName] = charArray;
+                
+                // 重新初始化词库选择下拉框
+                initLibrarySelect();
+                // 更新字符输入框，确保复选框状态正确
+                updateCharacterInputs();
+                alert(`成功导入词库 "${libraryName}" 到${selectedCategory}分类`);
+            } catch (error) {
+                console.error('导入词库失败:', error);
+                alert('导入词库失败，请检查文件格式');
+            }
         }
         
         function closeImportModal() {
@@ -2306,26 +2386,41 @@
                 if (!files.length) return;
                 
                 let importedCount = 0;
+                let mergedImportCount = 0;
                 
                 for (let file of files) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         try {
                             const content = e.target.result;
-                            const charArray = content.split(/\s+/).filter(char => char);
                             
-                            // 使用文件名作为词库名称（去除扩展名）
-                            const fileName = file.name.replace(/\.txt$/i, '');
-                            // 添加到用户选择的分类
-                            placeNameChars[selectedCategory][fileName] = charArray;
-                            importedCount++;
+                            // 检查是否为合并词库文件
+                            if (content.includes('[')) {
+                                // 处理合并词库文件
+                                const libraries = parseMergedLibraryFile(content);
+                                libraries.forEach(library => {
+                                    const { category, name, chars } = library;
+                                    placeNameChars[category][name] = chars;
+                                    mergedImportCount++;
+                                });
+                            } else {
+                                // 处理单个词库文件
+                                const charArray = content.split(/\s+/).filter(char => char);
+                                // 使用文件名作为词库名称（去除扩展名）
+                                const fileName = file.name.replace(/\.txt$/i, '');
+                                // 添加到用户选择的分类
+                                placeNameChars[selectedCategory][fileName] = charArray;
+                                importedCount++;
+                            }
                             
-                            if (importedCount === files.length) {
+                            // 检查是否所有文件都处理完成
+                            const totalProcessed = importedCount + mergedImportCount;
+                            if (totalProcessed === files.length) {
                                 // 重新初始化词库选择下拉框
                                 initLibrarySelect();
                                 // 更新字符输入框，确保复选框状态正确
                                 updateCharacterInputs();
-                                alert(`成功导入 ${importedCount} 个词库到${selectedCategory}分类`);
+                                alert(`成功导入 ${totalProcessed} 个词库`);
                             }
                         } catch (error) {
                             console.error('导入词库失败:', error);
@@ -2337,6 +2432,55 @@
             };
             
             input.click();
+        }
+        
+        // 解析合并词库文件
+        function parseMergedLibraryFile(content) {
+            const libraries = [];
+            const lines = content.split('\n');
+            
+            let currentCategory = '';
+            let currentName = '';
+            let currentChars = [];
+            
+            lines.forEach(line => {
+                line = line.trim();
+                
+                // 检查是否为词库标记行
+                if (line.startsWith('[') && line.endsWith(']')) {
+                    // 保存之前的词库
+                    if (currentCategory && currentName) {
+                        libraries.push({
+                            category: currentCategory,
+                            name: currentName,
+                            chars: currentChars
+                        });
+                    }
+                    
+                    // 解析新的词库标记
+                    const match = line.match(/\[(.*?)\/(.*?)\]/);
+                    if (match) {
+                        currentCategory = match[1];
+                        currentName = match[2];
+                        currentChars = [];
+                    }
+                } else if (line && currentCategory && currentName) {
+                    // 解析字符行
+                    const chars = line.split(/\s+/).filter(char => char);
+                    currentChars = currentChars.concat(chars);
+                }
+            });
+            
+            // 保存最后一个词库
+            if (currentCategory && currentName) {
+                libraries.push({
+                    category: currentCategory,
+                    name: currentName,
+                    chars: currentChars
+                });
+            }
+            
+            return libraries;
         }
         
         // 导出词库
@@ -2355,13 +2499,13 @@
             
             // 遍历所有分类和词库
             Object.entries(placeNameChars).forEach(([category, libraries]) => {
-                checkboxesHTML += `<h5 style="margin-top: 15px; margin-bottom: 10px; color: #495057;">${category}</h5>`;
+                checkboxesHTML += `<h5 style="margin-top: 15px; margin-bottom: 10px; color: var(--text-color); transition: color 0.3s ease;">${category}</h5>`;
                 
                 Object.keys(libraries).forEach(libraryName => {
                     checkboxesHTML += `
                         <div style="display: flex; align-items: center; margin-bottom: 8px;">
                             <input type="checkbox" id="export-${category}-${libraryName}" value="${category}/${libraryName}" style="transform: scale(1.2); margin-right: 10px;">
-                            <label for="export-${category}-${libraryName}" style="font-size: 14px; cursor: pointer;">${libraryName}</label>
+                            <label for="export-${category}-${libraryName}" style="font-size: 14px; cursor: pointer; color: var(--text-color); transition: color 0.3s ease;">${libraryName}</label>
                         </div>
                     `;
                 });
@@ -2375,14 +2519,14 @@
                     </div>
                     <div class="library-content" style="max-height: 400px; overflow-y: auto;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <p style="margin: 0; font-size: 14px;">请选择要导出的词库：</p>
+                            <p style="margin: 0; font-size: 14px; color: var(--text-color); transition: color 0.3s ease;">请选择要导出的词库：</p>
                             <div style="display: flex; gap: 5px;">
                                 <button class="btn btn-primary" onclick="selectAllExportLibraries()" style="padding: 4px 10px; font-size: 12px;">全选</button>
                                 <button class="btn btn-warning" onclick="invertExportLibraries()" style="padding: 4px 10px; font-size: 12px;">反选</button>
                                 <button class="btn btn-danger" onclick="clearExportLibraries()" style="padding: 4px 10px; font-size: 12px;">清空</button>
                             </div>
                         </div>
-                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #e9ecef;">
+                        <div style="background-color: var(--card-bg); padding: 15px; border-radius: 5px; border: 1px solid var(--border-color); transition: background-color 0.3s ease, border-color 0.3s ease;">
                             ${checkboxesHTML}
                         </div>
                     </div>
@@ -2447,10 +2591,46 @@
                 return;
             }
             
+            // 询问用户是否合并导出
+            if (confirm('是否将选中的词库合并为一个文件导出？\n\n取消则每个词库单独导出为一个文件')) {
+                // 合并导出
+                exportMergedLibraries(selectedLibraries);
+            } else {
+                // 单独导出每个选中的词库
+                selectedLibraries.forEach(libraryPath => {
+                    const [category, libraryName] = libraryPath.split('/');
+                    if (!category || !libraryName) return;
+                    
+                    const charArray = placeNameChars[category][libraryName] || [];
+                    const content = charArray.join(' ');
+                    
+                    // 创建Blob对象
+                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    
+                    // 创建下载链接
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${libraryName}.txt`;
+                    link.click();
+                    
+                    // 释放URL
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                });
+                
+                alert(`成功导出 ${selectedLibraries.length} 个词库`);
+            }
+            
             // 关闭弹窗
             modal.style.display = 'none';
+        }
+        
+        // 合并导出词库
+        function exportMergedLibraries(selectedLibraries) {
+            let mergedContent = '';
             
-            // 导出每个选中的词库
             selectedLibraries.forEach(libraryPath => {
                 const [category, libraryName] = libraryPath.split('/');
                 if (!category || !libraryName) return;
@@ -2458,23 +2638,27 @@
                 const charArray = placeNameChars[category][libraryName] || [];
                 const content = charArray.join(' ');
                 
-                // 创建Blob对象
-                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                
-                // 创建下载链接
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${libraryName}.txt`;
-                link.click();
-                
-                // 释放URL
-                setTimeout(() => {
-                    URL.revokeObjectURL(url);
-                }, 100);
+                // 格式：[分类/词库名]
+                // 字符1 字符2 字符3...
+                mergedContent += `[${category}/${libraryName}]\n${content}\n\n`;
             });
             
-            alert(`成功导出 ${selectedLibraries.length} 个词库`);
+            // 创建Blob对象
+            const blob = new Blob([mergedContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `merged_libraries_${new Date().toISOString().slice(0,10)}.txt`;
+            link.click();
+            
+            // 释放URL
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            alert(`成功将 ${selectedLibraries.length} 个词库合并导出为一个文件`);
         }
         
         // 更新词库文本框
