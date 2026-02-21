@@ -48,5 +48,6 @@
 如有问题或建议，请在 [GitHub 仓库](https://github.com/Shomota/name-generator) 上提交 Issue。
 
 ~~苦于天际线里地名的取名，全程让豆包搓的一个网页，完全不懂代码所以问我也没用……~~
+
 ---
 **享受生成地名的乐趣！** 🎉
